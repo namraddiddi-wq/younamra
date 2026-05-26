@@ -43,11 +43,11 @@ main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
   align-items:stretch;
 }
 
-/* 프사 — 히어로 높이에 맞게 꽉 채우는 정사각형 */
+/* 프사 — 원형 */
 .avatar-wrap{
   width:100%;
   aspect-ratio:1;
-  border-radius:16px;          /* 원이 아니라 둥근 사각형으로 넓게 */
+  border-radius:50%;
   background:linear-gradient(135deg,var(--primary-pale),var(--accent-soft));
   border:3px solid var(--primary-light);
   display:flex;align-items:center;justify-content:center;
@@ -71,11 +71,14 @@ main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
   line-height:1.1;
 }
 .platform-btns{display:flex;gap:7px;flex-wrap:wrap;}
-.pchip{display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border-radius:20px;font-size:.83rem;font-weight:700;text-decoration:none;transition:opacity .15s,transform .15s;}
-.pchip:hover{opacity:.82;transform:translateY(-1px);}
-.pchip.soop{background:#1aba7a;color:#fff;}
-.pchip.yt  {background:#ff0000;color:#fff;}
-.pchip.cafe{background:#03c75a;color:#fff;}
+.pchip{display:inline-flex;align-items:center;gap:5px;padding:6px 15px;border-radius:20px;font-size:.83rem;font-weight:700;text-decoration:none;background:transparent;transition:background .18s,transform .15s;border-width:2.5px;border-style:solid;}
+.pchip:hover{transform:translateY(-1px);}
+.pchip.soop{border-color:#1aba7a;color:#1aba7a;}
+.pchip.soop:hover{background:#1aba7a1a;}
+.pchip.yt  {border-color:#ff0000;color:#ff0000;}
+.pchip.yt:hover{background:#ff00001a;}
+.pchip.cafe{border-color:#03c75a;color:#03c75a;}
+.pchip.cafe:hover{background:#03c75a1a;}
 
 /* 생일/데뷔/MBTI/팬닉 — 1행 균등 카드 */
 .meta-grid{
@@ -114,6 +117,8 @@ main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
   background:var(--white);border-radius:14px;padding:18px 14px;
   box-shadow:0 2px 14px var(--shadow);
   transition:transform .2s,box-shadow .2s;
+  text-align:center;
+  display:flex;flex-direction:column;align-items:center;
 }
 .content-card:hover{transform:translateY(-2px);box-shadow:0 6px 22px var(--shadow);}
 .content-card .cc-icon{font-size:1.3rem;margin-bottom:5px;}
@@ -134,7 +139,11 @@ main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
   border:1px solid var(--gray-200);
 }
 .goal-row .g-num{font-family:'Gowun Dodum',sans-serif;font-size:.74rem;color:var(--primary);font-weight:700;min-width:18px;}
-.goal-row .g-text{font-size:.85rem;color:var(--text-muted);}
+.goal-row .g-text{font-size:.85rem;color:var(--text);}
+.goal-row .g-sub{font-size:.76rem;color:var(--text-muted);display:block;margin-top:1px;}
+.goal-row.done{opacity:.5;}
+.goal-row .done-n{color:var(--gray-400);}
+.goal-row .done-t{text-decoration:line-through;color:var(--text-muted);}
 
 /* ══════════════════════════
    ③ 이번주 스케줄
@@ -160,10 +169,10 @@ main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
 .sig-item:hover{transform:scale(1.05);}
 .sig-item img{width:100%;height:100%;object-fit:cover;}
 
-.api-list{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
-.api-row{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;background:var(--gray-100);min-height:44px;border:1px solid var(--gray-200);}
-.api-row .api-dot{width:7px;height:7px;border-radius:50%;background:var(--primary-light);flex-shrink:0;}
-.api-row .api-label{font-size:.84rem;color:var(--text-muted);}
+.api-list{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+.api-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:9px;background:var(--gray-100);border:1px solid var(--gray-200);}
+.api-row .api-cnt{font-family:'Gowun Dodum',sans-serif;font-size:.76rem;color:var(--primary-deep);font-weight:700;min-width:62px;text-align:right;flex-shrink:0;}
+.api-row .api-label{font-size:.84rem;color:var(--text);}
 
 /* FOOTER */
 footer{text-align:center;padding:26px 20px;color:var(--gray-400);font-size:.78rem;border-top:1px solid var(--gray-200);}
@@ -282,10 +291,15 @@ footer{text-align:center;padding:26px 20px;color:var(--gray-400);font-size:.78re
     <div class="goal-card">
       <div class="card-label">목표</div>
       <div class="goal-list">
-        <div class="goal-row"><span class="g-num">01</span><span class="g-text"></span></div>
-        <div class="goal-row"><span class="g-num">02</span><span class="g-text"></span></div>
-        <div class="goal-row"><span class="g-num">03</span><span class="g-text"></span></div>
-        <div class="goal-row"><span class="g-num">04</span><span class="g-text"></span></div>
+        <div class="goal-row"><span class="g-num">01</span><span class="g-text">⭐ 건강해지기 ⭐ <span class="g-sub">목 상태 · 운동 · 생활패턴</span></span></div>
+        <div class="goal-row"><span class="g-num">04</span><span class="g-text">유튜브 가동 &amp; 구독자 500명</span></div>
+        <div class="goal-row"><span class="g-num">06</span><span class="g-text">뉴남라 공개</span></div>
+        <div class="goal-row"><span class="g-num">08</span><span class="g-text">커버곡 내기</span></div>
+        <div class="goal-row"><span class="g-num">09</span><span class="g-text">평청자 30명 달성</span></div>
+        <div class="goal-row done"><span class="g-num done-n">02</span><span class="g-text done-t">애청자 1000명</span></div>
+        <div class="goal-row done"><span class="g-num done-n">03</span><span class="g-text done-t">베스트 스트리머</span></div>
+        <div class="goal-row done"><span class="g-num done-n">05</span><span class="g-text done-t">마크 서버 or 컨텐츠 열기</span></div>
+        <div class="goal-row done"><span class="g-num done-n">07</span><span class="g-text done-t">굿즈 내기</span></div>
       </div>
     </div>
 
@@ -327,12 +341,19 @@ footer{text-align:center;padding:26px 20px;color:var(--gray-400);font-size:.78re
   <div class="bottom-card">
     <div class="card-label">💙 후원 API</div>
     <div class="api-list">
-      <div class="api-row"><span class="api-dot"></span><span class="api-label"></span></div>
-      <div class="api-row"><span class="api-dot"></span><span class="api-label"></span></div>
-      <div class="api-row"><span class="api-dot"></span><span class="api-label"></span></div>
-      <div class="api-row"><span class="api-dot"></span><span class="api-label"></span></div>
-      <div class="api-row"><span class="api-dot"></span><span class="api-label"></span></div>
-      <div class="api-row"><span class="api-dot"></span><span class="api-label"></span></div>
+      <div class="api-row"><span class="api-cnt">1개</span><span class="api-label">별풍선 촵</span></div>
+      <div class="api-row"><span class="api-cnt">10개</span><span class="api-label">뿅망치</span></div>
+      <div class="api-row"><span class="api-cnt">18개</span><span class="api-label">놀래키는 소리</span></div>
+      <div class="api-row"><span class="api-cnt">30개</span><span class="api-label">아봉권 (마이크 OFF)</span></div>
+      <div class="api-row"><span class="api-cnt">33개</span><span class="api-label">하트 또르르</span></div>
+      <div class="api-row"><span class="api-cnt">50개</span><span class="api-label">유랑이가 망치로 남라 때리기</span></div>
+      <div class="api-row"><span class="api-cnt">100개</span><span class="api-label">코인와다다</span></div>
+      <div class="api-row"><span class="api-cnt">330개</span><span class="api-label">하트 와르르</span></div>
+      <div class="api-row"><span class="api-cnt">434 / 700개</span><span class="api-label">유랑이 볼뽀뽀</span></div>
+      <div class="api-row"><span class="api-cnt">500개</span><span class="api-label">버블건</span></div>
+      <div class="api-row"><span class="api-cnt">1000 ~ 2999개</span><span class="api-label">유랑이머니건</span></div>
+      <div class="api-row"><span class="api-cnt">1434개</span><span class="api-label">천사날개</span></div>
+      <div class="api-row"><span class="api-cnt">3000개+</span><span class="api-label">모시모시 댄스댄스</span></div>
     </div>
   </div>
 </div>
