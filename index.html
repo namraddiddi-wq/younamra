@@ -10,130 +10,174 @@
 :root {
   --primary:#6dcdd0;--primary-light:#9de0e2;--primary-pale:#e8f9f9;
   --primary-dark:#4ab8bc;--primary-deep:#2a8a8d;
-  --accent:#f0a8c8;--accent-light:#f7cce0;--accent-soft:#fde8f2;
+  --accent:#f0a8c8;--accent-soft:#fde8f2;
   --white:#fff;--gray-100:#f7f7f7;--gray-200:#eee;--gray-400:#bbb;--gray-600:#888;
   --text:#1c1c2e;--text-muted:#6b7280;--shadow:rgba(109,205,208,.15);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Noto Sans KR',sans-serif;background:#f0fbfb;color:var(--text);min-height:100vh;}
 
-/* ── NAV ── */
+/* NAV */
 nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1.5px solid var(--primary-pale);display:flex;justify-content:center;}
 nav a{font-family:'Gowun Dodum',sans-serif;font-size:.95rem;color:var(--text-muted);text-decoration:none;padding:16px 36px;border-bottom:2.5px solid transparent;transition:color .2s,border-color .2s;}
 nav a:hover,nav a.active{color:var(--primary-deep);border-bottom-color:var(--primary);}
 
-/* ── LAYOUT ── */
 main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
 .fade-up{opacity:0;transform:translateY(24px);transition:opacity .5s ease,transform .5s ease;}
 .fade-up.visible{opacity:1;transform:translateY(0);}
 .sec-head{font-family:'Gowun Dodum',sans-serif;font-size:1.05rem;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .sec-head .badge{width:24px;height:24px;background:var(--primary);border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem;}
-.card{background:var(--white);border-radius:16px;padding:22px;box-shadow:0 3px 20px var(--shadow);transition:transform .2s,box-shadow .2s;}
-.card:hover{transform:translateY(-2px);box-shadow:0 7px 28px var(--shadow);}
 .card-label{font-family:'Gowun Dodum',sans-serif;font-size:.9rem;color:var(--primary-deep);margin-bottom:12px;padding-left:9px;border-left:3px solid var(--primary);}
 
-/* ══════════════════════════════
+/* ══════════════════════════
    ① 히어로
-══════════════════════════════ */
+══════════════════════════ */
 .profile-hero{
-  display:grid;grid-template-columns:160px 1fr;
-  gap:28px;align-items:start;
   background:var(--white);border-radius:20px;
   padding:30px;box-shadow:0 4px 28px var(--shadow);
   margin-bottom:16px;
+  display:grid;
+  /* 좌: 30% 프사 / 우: 나머지 */
+  grid-template-columns: 30% 1fr;
+  gap:28px;
+  align-items:stretch;
 }
+
+/* 프사 — 히어로 높이에 맞게 꽉 채우는 정사각형 */
 .avatar-wrap{
-  width:140px;height:140px;border-radius:50%;
+  width:100%;
+  aspect-ratio:1;
+  border-radius:16px;          /* 원이 아니라 둥근 사각형으로 넓게 */
   background:linear-gradient(135deg,var(--primary-pale),var(--accent-soft));
-  border:4px solid var(--primary-light);
+  border:3px solid var(--primary-light);
   display:flex;align-items:center;justify-content:center;
-  font-size:3rem;overflow:hidden;flex-shrink:0;
+  font-size:4rem;overflow:hidden;
 }
 .avatar-wrap img{width:100%;height:100%;object-fit:cover;}
 
-/* 이름 + 뱃지 그룹 */
-.profile-right h1{font-family:'Gowun Dodum',sans-serif;font-size:1.9rem;margin-bottom:10px;}
+/* 우측 전체 컬럼 */
+.profile-right{
+  display:flex;flex-direction:column;gap:14px;
+}
 
-/* SOOP/유튜브/팬카페 — 채워진 알약 */
-.platform-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
-.pchip{display:inline-flex;align-items:center;gap:4px;padding:5px 13px;border-radius:20px;font-size:.8rem;font-weight:600;text-decoration:none;transition:opacity .15s,transform .15s;}
-.pchip:hover{opacity:.85;transform:translateY(-1px);}
-.pchip.soop  {background:#1aba7a;color:#fff;}
-.pchip.yt    {background:#ff0000;color:#fff;}
-.pchip.cafe  {background:#03c75a;color:#fff;}
+/* 이름 + 플랫폼 버튼 — 같은 행, 이름 왼쪽 버튼 오른쪽 */
+.name-platform-row{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+}
+.name-platform-row h1{
+  font-family:'Gowun Dodum',sans-serif;
+  font-size:2.6rem;
+  color:var(--text);
+  line-height:1.1;
+}
+.platform-btns{display:flex;gap:7px;flex-wrap:wrap;}
+.pchip{display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border-radius:20px;font-size:.83rem;font-weight:700;text-decoration:none;transition:opacity .15s,transform .15s;}
+.pchip:hover{opacity:.82;transform:translateY(-1px);}
+.pchip.soop{background:#1aba7a;color:#fff;}
+.pchip.yt  {background:#ff0000;color:#fff;}
+.pchip.cafe{background:#03c75a;color:#fff;}
 
-/* 생일/데뷔/MBTI/팬닉 — 모서리 둥근 직사각형 태그 */
-.meta-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px;}
-.mtag{background:var(--gray-100);border-radius:10px;padding:6px 12px;font-size:.8rem;color:var(--text-muted);border:1px solid var(--gray-200);}
-.mtag strong{color:var(--text);font-weight:600;}
+/* 생일/데뷔/MBTI/팬닉 — 1행 균등 카드 */
+.meta-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+.meta-card{
+  background:var(--primary-pale);border-radius:14px;
+  padding:14px 12px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:5px;text-align:center;
+  border:1px solid var(--primary-light);
+}
+.meta-card .mc-key{font-size:.73rem;color:var(--primary-deep);font-weight:600;letter-spacing:.04em;}
+.meta-card .mc-val{font-size:.88rem;color:var(--text);font-weight:700;line-height:1.3;}
 
-/* RP/TMI — 넓적한 직사각형 2개 */
-.rp-tmi-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.rp-box{border-radius:12px;padding:9px 14px;font-size:.82rem;font-weight:500;}
+/* RP / TMI — 2열 */
+.rp-tmi-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.rp-box{border-radius:12px;padding:12px 15px;font-size:.83rem;font-weight:500;line-height:1.5;}
 .rp-box.rp {background:#f0e8ff;color:#6030b0;}
 .rp-box.tmi{background:#e8f0ff;color:#3050b8;}
+.rp-box .sub{font-size:.74rem;opacity:.72;display:block;margin-top:2px;}
 
-/* ══════════════════════════════
-   ② 방송 정보 — 컨텐츠 2×2 + 목표
-══════════════════════════════ */
-.broadcast-section{margin-bottom:20px;}
+/* ══════════════════════════
+   ② 방송 정보 — 컨텐츠(2×2 좌) + 목표(우)
+══════════════════════════ */
+.broadcast-wrap{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:14px;margin-bottom:20px;
+  align-items:start;
+}
 
-/* 컨텐츠 2×2 카드 그리드 */
-.content-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:12px;margin-bottom:12px;}
-.content-card{background:var(--white);border-radius:14px;padding:18px;box-shadow:0 2px 14px var(--shadow);transition:transform .2s,box-shadow .2s;}
+/* 컨텐츠 2×2 내부 그리드 */
+.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.content-card{
+  background:var(--white);border-radius:14px;padding:18px 14px;
+  box-shadow:0 2px 14px var(--shadow);
+  transition:transform .2s,box-shadow .2s;
+}
 .content-card:hover{transform:translateY(-2px);box-shadow:0 6px 22px var(--shadow);}
-.content-card .cc-icon{font-size:1.4rem;margin-bottom:6px;}
-.content-card .cc-label{font-size:.72rem;color:var(--text-muted);margin-bottom:4px;font-weight:500;letter-spacing:.02em;}
-.content-card .cc-value{font-size:.88rem;color:var(--text);font-weight:600;line-height:1.5;}
+.content-card .cc-icon{font-size:1.3rem;margin-bottom:5px;}
+.content-card .cc-label{font-size:.7rem;color:var(--text-muted);margin-bottom:3px;font-weight:600;letter-spacing:.03em;}
+.content-card .cc-value{font-size:.86rem;color:var(--text);font-weight:600;line-height:1.5;}
 
 /* 목표 카드 */
-.goal-card{background:var(--white);border-radius:14px;padding:18px;box-shadow:0 2px 14px var(--shadow);}
-.goal-list{display:flex;flex-direction:column;gap:10px;margin-top:4px;}
-.goal-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:var(--gray-100);min-height:42px;}
-.goal-row .g-num{font-family:'Gowun Dodum',sans-serif;font-size:.75rem;color:var(--primary);font-weight:700;min-width:18px;}
-.goal-row .g-text{font-size:.86rem;color:var(--text-muted);}
+.goal-card{
+  background:var(--white);border-radius:14px;padding:20px;
+  box-shadow:0 2px 14px var(--shadow);
+  height:100%;
+}
+.goal-list{display:flex;flex-direction:column;gap:9px;margin-top:6px;}
+.goal-row{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 14px;border-radius:10px;
+  background:var(--gray-100);min-height:44px;
+  border:1px solid var(--gray-200);
+}
+.goal-row .g-num{font-family:'Gowun Dodum',sans-serif;font-size:.74rem;color:var(--primary);font-weight:700;min-width:18px;}
+.goal-row .g-text{font-size:.85rem;color:var(--text-muted);}
 
-/* ══════════════════════════════
+/* ══════════════════════════
    ③ 이번주 스케줄
-══════════════════════════════ */
-.week-grid{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
-.day{flex:1;min-width:36px;text-align:center;padding:9px 4px;border-radius:10px;font-size:.8rem;font-weight:600;background:var(--gray-100);color:var(--gray-600);border:1.5px solid transparent;transition:background .2s;}
+══════════════════════════ */
+.schedule-card{background:var(--white);border-radius:16px;padding:22px;box-shadow:0 3px 20px var(--shadow);margin-bottom:20px;}
+.week-grid{display:flex;gap:6px;margin-bottom:12px;}
+.day{flex:1;text-align:center;padding:9px 4px;border-radius:10px;font-size:.8rem;font-weight:600;background:var(--gray-100);color:var(--gray-600);border:1.5px solid transparent;transition:background .2s;}
 .day.on {background:var(--primary-pale);color:var(--primary-deep);border-color:var(--primary-light);}
 .day.off{background:#fff0f0;color:#e88;}
 .day.today{background:var(--primary);color:#fff;border-color:var(--primary-dark);}
-.day small{display:block;font-size:.68rem;font-weight:400;margin-top:2px;}
+.day small{display:block;font-size:.67rem;font-weight:400;margin-top:2px;}
 .sched-note{background:var(--primary-pale);border-radius:9px;padding:10px 14px;font-size:.85rem;color:var(--primary-deep);display:flex;align-items:center;gap:8px;}
 .sched-note::before{content:'📡';}
 
-/* ══════════════════════════════
-   ④ 시그풍 (좌) + 후원API (우) 병렬
-══════════════════════════════ */
-.bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:0;}
+/* ══════════════════════════
+   ④ 시그풍(좌) + 후원API(우) 병렬
+══════════════════════════ */
+.bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.bottom-card{background:var(--white);border-radius:16px;padding:20px;box-shadow:0 3px 20px var(--shadow);}
 
-/* 시그풍 — 작아진 이미지 그리드 */
-.sig-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:4px;}
-.sig-item{aspect-ratio:1;border-radius:10px;background:linear-gradient(135deg,var(--primary-pale),var(--accent-soft));border:1.5px dashed var(--primary-light);display:flex;align-items:center;justify-content:center;color:var(--primary-light);font-size:1.1rem;overflow:hidden;transition:transform .18s;}
+.sig-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
+.sig-item{aspect-ratio:1;border-radius:10px;background:linear-gradient(135deg,var(--primary-pale),var(--accent-soft));border:1.5px dashed var(--primary-light);display:flex;align-items:center;justify-content:center;color:var(--primary-light);font-size:1rem;overflow:hidden;transition:transform .18s;}
 .sig-item:hover{transform:scale(1.05);}
 .sig-item img{width:100%;height:100%;object-fit:cover;}
 
-/* API 목록 */
-.api-list{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+.api-list{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
 .api-row{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;background:var(--gray-100);min-height:44px;border:1px solid var(--gray-200);}
 .api-row .api-dot{width:7px;height:7px;border-radius:50%;background:var(--primary-light);flex-shrink:0;}
 .api-row .api-label{font-size:.84rem;color:var(--text-muted);}
 
-/* ── FOOTER ── */
+/* FOOTER */
 footer{text-align:center;padding:26px 20px;color:var(--gray-400);font-size:.78rem;border-top:1px solid var(--gray-200);}
 
-/* ── RESPONSIVE ── */
+/* RESPONSIVE */
 @media(max-width:768px){
-  .profile-hero{grid-template-columns:1fr;text-align:center;}
-  .avatar-wrap{width:110px;height:110px;margin:0 auto;font-size:2.4rem;}
-  .platform-row,.meta-row{justify-content:center;}
+  .profile-hero{grid-template-columns:1fr;}
+  .avatar-wrap{width:120px;aspect-ratio:1;margin:0 auto;}
+  .name-platform-row{flex-direction:column;align-items:flex-start;}
+  .meta-grid{grid-template-columns:repeat(2,1fr);}
   .rp-tmi-row{grid-template-columns:1fr;}
-  .content-grid{grid-template-columns:1fr;}
+  .broadcast-wrap{grid-template-columns:1fr;}
+  .content-grid{grid-template-columns:1fr 1fr;}
   .bottom-row{grid-template-columns:1fr;}
-  .sig-grid{grid-template-columns:repeat(3,1fr);}
   nav a{padding:13px 16px;font-size:.85rem;}
 }
 </style>
@@ -149,85 +193,109 @@ footer{text-align:center;padding:26px 20px;color:var(--gray-400);font-size:.78re
 
 <main>
 
-<!-- ══════ ① 히어로 ══════ -->
+<!-- ① 히어로 -->
 <div class="fade-up" style="margin-bottom:20px;">
   <div class="profile-hero">
 
-    <!-- 좌: 프사 -->
-    <div class="avatar-wrap" id="avatarWrap">🩵</div>
+    <!-- 좌: 프사 30% -->
+    <div class="avatar-wrap">🩵</div>
 
-    <!-- 우: 이름 + 뱃지 그룹들 -->
+    <!-- 우: 나머지 꽉 채우기 -->
     <div class="profile-right">
-      <h1>유남라</h1>
 
-      <!-- SOOP / 유튜브 / 팬카페 — 채워진 알약 -->
-      <div class="platform-row">
-        <a class="pchip soop" href="https://www.sooplive.com/station/younamra" target="_blank">🎮 SOOP</a>
-        <a class="pchip yt"   href="https://www.youtube.com/@younamra" target="_blank">▶ 유튜브</a>
-        <a class="pchip cafe" href="https://cafe.naver.com/younamra" target="_blank">☕ 팬카페</a>
+      <!-- 이름(좌) + 플랫폼 버튼(우) -->
+      <div class="name-platform-row">
+        <h1>유남라</h1>
+        <div class="platform-btns">
+          <a class="pchip soop" href="https://www.sooplive.com/station/younamra" target="_blank">🎮 SOOP</a>
+          <a class="pchip yt"   href="https://www.youtube.com/@younamra" target="_blank">▶ 유튜브</a>
+          <a class="pchip cafe" href="https://cafe.naver.com/younamra" target="_blank">☕ 팬카페</a>
+        </div>
       </div>
 
-      <!-- 생일 / 데뷔 / MBTI / 팬닉 — 사각 태그 한 줄 -->
-      <div class="meta-row">
-        <span class="mtag"><strong>생일</strong> 12/14</span>
-        <span class="mtag"><strong>데뷔</strong> 2025.04.01</span>
-        <span class="mtag"><strong>MBTI</strong> ISFJ</span>
-        <span class="mtag"><strong>팬닉</strong> 유랑이 · 뒤에 ^´</span>
+      <!-- 생일/데뷔/MBTI/팬닉 1행 균등 카드 -->
+      <div class="meta-grid">
+        <div class="meta-card">
+          <div class="mc-key">생일</div>
+          <div class="mc-val">12월 14일</div>
+        </div>
+        <div class="meta-card">
+          <div class="mc-key">데뷔</div>
+          <div class="mc-val">2025.04.01</div>
+        </div>
+        <div class="meta-card">
+          <div class="mc-key">MBTI</div>
+          <div class="mc-val">ISFJ</div>
+        </div>
+        <div class="meta-card">
+          <div class="mc-key">팬닉</div>
+          <div class="mc-val">유랑이 · ^´</div>
+        </div>
       </div>
 
-      <!-- RP / · TMI — 넓적한 2열 직사각형 -->
+      <!-- RP / TMI -->
       <div class="rp-tmi-row">
-        <div class="rp-box rp">💀 RP — 실직한 저승사자<br><span style="font-size:.76rem;opacity:.75;">(구 저승사자 → 현 인간)</span></div>
-        <div class="rp-box tmi">🇨🇳 · TMI<br><span style="font-size:.76rem;opacity:.75;">중국 유학 출신 · 방송에서 중국노래</span></div>
+        <div class="rp-box rp">
+          💀 RP
+          <span class="sub">실직한 저승사자 (구 저승사자 → 현 인간)</span>
+        </div>
+        <div class="rp-box tmi">
+          🇨🇳 · TMI
+          <span class="sub">중국 유학 출신 · 방송에서 중국노래 부르기도</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ② 방송 정보 -->
+<div class="fade-up" style="margin-bottom:20px;">
+  <div class="sec-head"><span class="badge">🎮</span>방송 정보</div>
+  <div class="broadcast-wrap">
+
+    <!-- 좌: 컨텐츠 2×2 -->
+    <div class="content-grid">
+      <div class="content-card">
+        <div class="cc-icon">📡</div>
+        <div class="cc-label">방송 주제</div>
+        <div class="cc-value">소통 · 종합게임</div>
+      </div>
+      <div class="content-card">
+        <div class="cc-icon">🎮</div>
+        <div class="cc-label">주요 게임</div>
+        <div class="cc-value">마크 · 배그 · 발로<br>롤체 · 스팀게임</div>
+      </div>
+      <div class="content-card">
+        <div class="cc-icon">🎵</div>
+        <div class="cc-label">음악 장르</div>
+        <div class="cc-value">한국 · 중국 · J-Pop<br>Pop · 애교송</div>
+      </div>
+      <div class="content-card">
+        <div class="cc-icon">🎤</div>
+        <div class="cc-label">노래 빈도</div>
+        <div class="cc-value">가끔</div>
       </div>
     </div>
+
+    <!-- 우: 목표 4행 -->
+    <div class="goal-card">
+      <div class="card-label">목표</div>
+      <div class="goal-list">
+        <div class="goal-row"><span class="g-num">01</span><span class="g-text"></span></div>
+        <div class="goal-row"><span class="g-num">02</span><span class="g-text"></span></div>
+        <div class="goal-row"><span class="g-num">03</span><span class="g-text"></span></div>
+        <div class="goal-row"><span class="g-num">04</span><span class="g-text"></span></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
-<!-- ══════ ② 방송 정보 ══════ -->
-<div class="fade-up broadcast-section">
-  <div class="sec-head"><span class="badge">🎮</span>방송 정보</div>
-
-  <!-- 컨텐츠 2×2 카드 -->
-  <div class="content-grid">
-    <div class="content-card">
-      <div class="cc-icon">📡</div>
-      <div class="cc-label">방송 주제</div>
-      <div class="cc-value">소통 · 종합게임</div>
-    </div>
-    <div class="content-card">
-      <div class="cc-icon">🎮</div>
-      <div class="cc-label">주요 게임</div>
-      <div class="cc-value">마크 · 배그 · 발로<br>롤체 · 스팀게임</div>
-    </div>
-    <div class="content-card">
-      <div class="cc-icon">🎵</div>
-      <div class="cc-label">음악 장르</div>
-      <div class="cc-value">한국 · 중국 · J-Pop<br>Pop · 애교송</div>
-    </div>
-    <div class="content-card">
-      <div class="cc-icon">🎤</div>
-      <div class="cc-label">노래 빈도</div>
-      <div class="cc-value">가끔</div>
-    </div>
-  </div>
-
-  <!-- 목표 카드 (4행 공란) -->
-  <div class="goal-card">
-    <div class="card-label">목표</div>
-    <div class="goal-list">
-      <div class="goal-row"><span class="g-num">01</span><span class="g-text"></span></div>
-      <div class="goal-row"><span class="g-num">02</span><span class="g-text"></span></div>
-      <div class="goal-row"><span class="g-num">03</span><span class="g-text"></span></div>
-      <div class="goal-row"><span class="g-num">04</span><span class="g-text"></span></div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════ ③ 이번주 스케줄 ══════ -->
-<div class="fade-up" style="margin:20px 0;">
+<!-- ③ 이번주 스케줄 -->
+<div class="fade-up" style="margin-bottom:20px;">
   <div class="sec-head"><span class="badge">📅</span>이번주 스케줄</div>
-  <div class="card">
+  <div class="schedule-card">
     <div class="week-grid">
       <div class="day off" data-day="1">월<small>휴방</small></div>
       <div class="day on"  data-day="2">화</div>
@@ -241,13 +309,11 @@ footer{text-align:center;padding:26px 20px;color:var(--gray-400);font-size:.78re
   </div>
 </div>
 
-<!-- ══════ ④ 시그풍 (좌) + 후원 API 목록 (우) ══════ -->
+<!-- ④ 시그풍(좌) + 후원 API(우) -->
 <div class="fade-up bottom-row">
-
-  <!-- 시그풍 -->
-  <div class="card">
+  <div class="bottom-card">
     <div class="card-label">🖼️ 시그풍</div>
-    <div class="sig-grid" id="sigGrid">
+    <div class="sig-grid">
       <div class="sig-item">🖼️</div>
       <div class="sig-item">🖼️</div>
       <div class="sig-item">🖼️</div>
@@ -258,9 +324,7 @@ footer{text-align:center;padding:26px 20px;color:var(--gray-400);font-size:.78re
       <div class="sig-item">🖼️</div>
     </div>
   </div>
-
-  <!-- 후원 API 목록 -->
-  <div class="card">
+  <div class="bottom-card">
     <div class="card-label">💙 후원 API</div>
     <div class="api-list">
       <div class="api-row"><span class="api-dot"></span><span class="api-label"></span></div>
@@ -271,7 +335,6 @@ footer{text-align:center;padding:26px 20px;color:var(--gray-400);font-size:.78re
       <div class="api-row"><span class="api-dot"></span><span class="api-label"></span></div>
     </div>
   </div>
-
 </div>
 
 </main>
@@ -279,7 +342,6 @@ footer{text-align:center;padding:26px 20px;color:var(--gray-400);font-size:.78re
 <footer>유남라 팬사이트 · 팬 이름 유랑이 · 팬닉 뒤에 ^´</footer>
 
 <script>
-// fade-up
 const io = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);} });
 }, {threshold:0.06});
@@ -287,11 +349,9 @@ document.querySelectorAll('.fade-up').forEach(el => {
   io.observe(el);
   if(el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
 });
-
-// 오늘 요일 하이라이트
 const today = new Date().getDay();
 document.querySelectorAll('.day').forEach(d => {
-  if(parseInt(d.dataset.day) === today) { d.classList.remove('off','on'); d.classList.add('today'); }
+  if(parseInt(d.dataset.day) === today){d.classList.remove('off','on');d.classList.add('today');}
 });
 </script>
 </body>
