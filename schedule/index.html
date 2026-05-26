@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>일정 — 유남라</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:#6dcdd0;--primary-light:#9de0e2;--primary-pale:#e8f9f9;
+  --primary-dark:#4ab8bc;--primary-deep:#2a8a8d;
+  --white:#fff;--gray-100:#f7f7f7;--gray-200:#eee;--gray-400:#bbb;--gray-600:#888;
+  --text:#1c1c2e;--text-muted:#6b7280;--shadow:rgba(109,205,208,.15);
+  --status-normal: var(--primary-pale);
+  --status-holiday: #fff0f0;
+  --status-special: #f0e8ff;
+  --status-anniversary: #fff5e0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans KR',sans-serif;background:#f0fbfb;color:var(--text);}
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1.5px solid var(--primary-pale);display:flex;justify-content:center;}
+nav a{font-family:'Gowun Dodum',sans-serif;font-size:.95rem;color:var(--text-muted);text-decoration:none;padding:16px 36px;border-bottom:2.5px solid transparent;transition:color .2s,border-color .2s;}
+nav a:hover,nav a.active{color:var(--primary-deep);border-bottom-color:var(--primary);}
+main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
+.page-head{font-family:'Gowun Dodum',sans-serif;font-size:1.5rem;color:var(--primary-deep);margin-bottom:24px;}
+
+/* CAL HEADER */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.cal-title{font-family:'Gowun Dodum',sans-serif;font-size:1.2rem;color:var(--text);}
+.cal-btn{width:36px;height:36px;border:1.5px solid var(--gray-200);border-radius:10px;background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:all .2s;}
+.cal-btn:hover{background:var(--primary-pale);border-color:var(--primary);}
+
+/* CALENDAR GRID */
+.cal-wrap{background:var(--white);border-radius:16px;padding:20px;box-shadow:0 3px 20px var(--shadow);margin-bottom:20px;}
+.cal-days-header{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:8px;}
+.cal-days-header span{text-align:center;font-size:.78rem;font-weight:600;color:var(--gray-600);padding:6px 0;}
+.cal-days-header span:first-child{color:#e88;}
+.cal-days-header span:last-child{color:#6dcdd0;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.cal-cell{min-height:72px;border-radius:10px;padding:6px;cursor:pointer;transition:background .15s;border:1.5px solid transparent;}
+.cal-cell:hover{background:var(--primary-pale);}
+.cal-cell.empty{cursor:default;background:none;}
+.cal-cell.today .date-num{background:var(--primary);color:var(--white);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.78rem;}
+.cal-cell.selected{border-color:var(--primary);background:var(--primary-pale);}
+.cal-cell.status-holiday{background:#fff5f5;}
+.cal-cell.status-special{background:#f8f0ff;}
+.cal-cell.status-anniversary{background:#fffbe0;}
+.date-num{font-size:.78rem;font-weight:600;color:var(--text-muted);margin-bottom:4px;}
+.cal-cell.sun .date-num{color:#e88;}
+.cal-cell.sat .date-num{color:var(--primary-dark);}
+.slot-preview{font-size:.72rem;color:var(--primary-deep);background:var(--primary-pale);border-radius:4px;padding:2px 5px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.slot-preview.holiday{background:#ffe0e0;color:#c44;}
+.slot-preview.special{background:#ede0ff;color:#7040c0;}
+.slot-preview.anniversary{background:#fff0c0;color:#a08000;}
+
+/* DETAIL */
+.detail-card{background:var(--white);border-radius:16px;padding:24px;box-shadow:0 3px 20px var(--shadow);}
+.detail-date{font-family:'Gowun Dodum',sans-serif;font-size:1.1rem;color:var(--primary-deep);margin-bottom:16px;}
+.slot-row{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--gray-100);}
+.slot-row:last-child{border-bottom:none;}
+.slot-time{font-size:.85rem;font-weight:700;color:var(--primary);min-width:50px;padding-top:2px;}
+.slot-title{font-size:.92rem;color:var(--text);font-weight:500;}
+.slot-note{font-size:.82rem;color:var(--text-muted);margin-top:3px;}
+.no-sched{color:var(--gray-400);font-size:.9rem;padding:12px 0;}
+
+footer{text-align:center;padding:28px 20px;color:var(--gray-400);font-size:.8rem;border-top:1px solid var(--gray-200);}
+@media(max-width:768px){nav a{padding:14px 18px;font-size:.85rem;}.cal-cell{min-height:52px;padding:4px;}.slot-preview{display:none;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../">프로필</a>
+  <a href="#" class="active">일정</a>
+  <a href="../songbook/">노래책</a>
+  <a href="../upbo/">업보</a>
+</nav>
+<main>
+  <div class="page-head">📅 방송 일정</div>
+
+  <div class="cal-wrap">
+    <div class="cal-nav">
+      <button class="cal-btn" id="prevBtn">‹</button>
+      <div class="cal-title" id="calTitle"></div>
+      <button class="cal-btn" id="nextBtn">›</button>
+    </div>
+    <div class="cal-days-header">
+      <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+  </div>
+
+  <div class="detail-card" id="detailCard" style="display:none;"></div>
+</main>
+<footer>유남라 팬사이트 · 팬 이름 유랑이 · 팬닉 뒤에 ^´</footer>
+
+<script>
+const SUPABASE_URL  = 'https://xigbjaayjqshjulsovqn.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpZ2JqYWF5anFzaGp1bHNvdnFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MjQwNzgsImV4cCI6MjA5NTQwMDA3OH0.B7akZMoAdrjF7CiLMNHvTOmO1dapHTlkEL8fbho30Us';
+
+let cur = new Date(); cur.setDate(1);
+let schedMap = {};
+let selectedDate = null;
+
+const STATUS_LABEL = { normal:'방송', holiday:'휴방', special:'특방', anniversary:'기념일' };
+
+async function loadMonth(y, m) {
+  const from = `${y}-${String(m+1).padStart(2,'0')}-01`;
+  const last  = new Date(y, m+1, 0).getDate();
+  const to    = `${y}-${String(m+1).padStart(2,'0')}-${String(last).padStart(2,'0')}`;
+  const res   = await fetch(`${SUPABASE_URL}/rest/v1/schedules?date=gte.${from}&date=lte.${to}&order=date.asc`, {
+    headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` }
+  });
+  const data = await res.json();
+  schedMap = Object.fromEntries(data.map(s => [s.date, s]));
+  renderCal(y, m);
+}
+
+function renderCal(y, m) {
+  const title = `${y}년 ${m+1}월`;
+  document.getElementById('calTitle').textContent = title;
+  const first = new Date(y, m, 1).getDay();
+  const last  = new Date(y, m+1, 0).getDate();
+  const today = new Date();
+  const grid  = document.getElementById('calGrid');
+  let html = '';
+  for (let i=0; i<first; i++) html += `<div class="cal-cell empty"></div>`;
+  for (let d=1; d<=last; d++) {
+    const dd = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const sc = schedMap[dd];
+    const dow = new Date(y,m,d).getDay();
+    const isToday = today.getFullYear()===y && today.getMonth()===m && today.getDate()===d;
+    const isSel   = selectedDate===dd;
+    let cls = 'cal-cell';
+    if (dow===0) cls+=' sun'; if (dow===6) cls+=' sat';
+    if (isToday) cls+=' today'; if (isSel) cls+=' selected';
+    if (sc) cls+=` status-${sc.status}`;
+    let slots = '';
+    if (sc) {
+      if (sc.status==='holiday') slots += `<div class="slot-preview holiday">🛌 휴방</div>`;
+      else if (sc.status==='anniversary') slots += `<div class="slot-preview anniversary">🎉 ${sc.note||'기념일'}</div>`;
+      else {
+        if (sc.slot1_title) slots += `<div class="slot-preview">${sc.slot1_time||''} ${sc.slot1_title}</div>`;
+        if (sc.slot2_title) slots += `<div class="slot-preview">${sc.slot2_time||''} ${sc.slot2_title}</div>`;
+      }
+    }
+    html += `<div class="${cls}" data-date="${dd}" onclick="selectDate('${dd}')"><div class="date-num">${isToday?`<span style="background:var(--primary);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;">${d}</span>`:d}</div>${slots}</div>`;
+  }
+  grid.innerHTML = html;
+}
+
+function selectDate(dd) {
+  selectedDate = dd;
+  document.querySelectorAll('.cal-cell').forEach(c => c.classList.toggle('selected', c.dataset.date===dd));
+  const sc = schedMap[dd];
+  const card = document.getElementById('detailCard');
+  const [y,m,d] = dd.split('-');
+  const dows = ['일','월','화','수','목','금','토'];
+  const dow  = dows[new Date(Number(y),Number(m)-1,Number(d)).getDay()];
+  let inner = `<div class="detail-date">${y}년 ${m}월 ${d}일 (${dow})</div>`;
+  if (!sc) {
+    inner += `<div class="no-sched">등록된 일정이 없어요</div>`;
+  } else if (sc.status==='holiday') {
+    inner += `<div class="slot-row"><div class="slot-time">🛌</div><div><div class="slot-title">정기 휴방</div>${sc.note?`<div class="slot-note">${sc.note}</div>`:''}</div></div>`;
+  } else if (sc.status==='anniversary') {
+    inner += `<div class="slot-row"><div class="slot-time">🎉</div><div><div class="slot-title">기념일</div>${sc.note?`<div class="slot-note">${sc.note}</div>`:''}</div></div>`;
+  } else {
+    if (sc.slot1_title) inner += `<div class="slot-row"><div class="slot-time">${sc.slot1_time||'?'}</div><div><div class="slot-title">${sc.slot1_title}</div>${sc.note?`<div class="slot-note">${sc.note}</div>`:''}</div></div>`;
+    if (sc.slot2_title) inner += `<div class="slot-row"><div class="slot-time">${sc.slot2_time||'?'}</div><div><div class="slot-title">${sc.slot2_title}</div></div></div>`;
+    if (!sc.slot1_title && !sc.slot2_title) inner += `<div class="no-sched">내용 없음</div>`;
+  }
+  card.innerHTML = inner;
+  card.style.display = 'block';
+  card.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+document.getElementById('prevBtn').onclick = () => { cur.setMonth(cur.getMonth()-1); selectedDate=null; document.getElementById('detailCard').style.display='none'; loadMonth(cur.getFullYear(),cur.getMonth()); };
+document.getElementById('nextBtn').onclick = () => { cur.setMonth(cur.getMonth()+1); selectedDate=null; document.getElementById('detailCard').style.display='none'; loadMonth(cur.getFullYear(),cur.getMonth()); };
+
+loadMonth(cur.getFullYear(), cur.getMonth());
+</script>
+</body>
+</html>
