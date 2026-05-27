@@ -7,6 +7,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <style>
+@font-face{font-family:'A2z';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-4Regular.woff2')format('woff2');font-weight:400;font-display:swap;}
+@font-face{font-family:'A2z';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-6SemiBold.woff2')format('woff2');font-weight:600;font-display:swap;}
+@font-face{font-family:'A2z';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-7Bold.woff2')format('woff2');font-weight:700;font-display:swap;}
+</style>
+<style>
 :root {
   --primary:#6dcdd0;--primary-light:#9de0e2;--primary-pale:#e8f9f9;
   --primary-dark:#4ab8bc;--primary-deep:#2a8a8d;
@@ -15,22 +20,22 @@
   --text:#1c1c2e;--text-muted:#6b7280;--shadow:rgba(109,205,208,.15);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Noto Sans KR',sans-serif;background:#f0fbfb;color:var(--text);}
+body{font-family:'A2z','Noto Sans KR',sans-serif;background:#f0fbfb;color:var(--text);}
 nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1.5px solid var(--primary-pale);display:flex;justify-content:center;}
-nav a{font-family:'Gowun Dodum',sans-serif;font-size:.95rem;color:var(--text-muted);text-decoration:none;padding:16px 36px;border-bottom:2.5px solid transparent;transition:color .2s,border-color .2s;}
+nav a{font-family:'A2z',sans-serif;font-size:.95rem;color:var(--text-muted);text-decoration:none;padding:16px 36px;border-bottom:2.5px solid transparent;transition:color .2s,border-color .2s;}
 nav a:hover,nav a.active{color:var(--primary-deep);border-bottom-color:var(--primary);}
 main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
 
 /* HEADER */
-.page-head{font-family:'Gowun Dodum',sans-serif;font-size:1.5rem;color:var(--primary-deep);margin-bottom:24px;display:flex;align-items:center;gap:10px;}
+.page-head{font-family:'A2z',sans-serif;font-size:1.5rem;color:var(--primary-deep);margin-bottom:24px;display:flex;align-items:center;gap:10px;}
 
 /* SEARCH + FILTER */
 .toolbar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
 .search-box{flex:1;min-width:200px;position:relative;}
-.search-box input{width:100%;padding:10px 16px 10px 40px;border:1.5px solid var(--gray-200);border-radius:12px;font-family:'Noto Sans KR',sans-serif;font-size:.9rem;background:var(--white);outline:none;transition:border-color .2s;}
+.search-box input{width:100%;padding:10px 16px 10px 40px;border:1.5px solid var(--gray-200);border-radius:12px;font-family:'A2z','Noto Sans KR',sans-serif;font-size:.9rem;background:var(--white);outline:none;transition:border-color .2s;}
 .search-box input:focus{border-color:var(--primary);}
 .search-box::before{content:'🔍';position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:.85rem;}
-.filter-btn{padding:9px 16px;border-radius:10px;border:1.5px solid var(--gray-200);background:var(--white);font-family:'Noto Sans KR',sans-serif;font-size:.85rem;cursor:pointer;color:var(--text-muted);transition:all .2s;}
+.filter-btn{padding:9px 16px;border-radius:10px;border:1.5px solid var(--gray-200);background:var(--white);font-family:'A2z','Noto Sans KR',sans-serif;font-size:.85rem;cursor:pointer;color:var(--text-muted);transition:all .2s;}
 .filter-btn:hover,.filter-btn.active{background:var(--primary-pale);border-color:var(--primary);color:var(--primary-deep);}
 
 /* STATS */
@@ -40,7 +45,7 @@ main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
 /* TABLE */
 .song-table{width:100%;border-collapse:collapse;background:var(--white);border-radius:16px;overflow:hidden;box-shadow:0 3px 20px var(--shadow);}
 .song-table thead tr{background:var(--primary-pale);}
-.song-table th{padding:12px 16px;text-align:left;font-family:'Gowun Dodum',sans-serif;font-size:.85rem;color:var(--primary-deep);font-weight:600;border-bottom:1.5px solid var(--primary-light);}
+.song-table th{padding:12px 16px;text-align:left;font-family:'A2z',sans-serif;font-size:.85rem;color:var(--primary-deep);font-weight:600;border-bottom:1.5px solid var(--primary-light);}
 .song-table tbody tr{border-bottom:1px solid var(--gray-100);transition:background .15s;}
 .song-table tbody tr:last-child{border-bottom:none;}
 .song-table tbody tr:hover{background:var(--primary-pale);}
@@ -52,6 +57,7 @@ main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
 .g-pop {background:#f0ffe8;color:#4a8a30;}
 .g-cn  {background:#ffe8f8;color:#c040a0;}
 .g-etc {background:var(--gray-100);color:var(--gray-600);}
+.g-aegyo{background:#ffe8f5;color:#c040a0;}
 
 .level-dots{display:flex;gap:3px;align-items:center;}
 .dot-f{width:8px;height:8px;border-radius:50%;background:var(--primary);}
@@ -114,8 +120,8 @@ footer{text-align:center;padding:28px 20px;color:var(--gray-400);font-size:.8rem
 const SUPABASE_URL  = 'https://xigbjaayjqshjulsovqn.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpZ2JqYWF5anFzaGp1bHNvdnFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MjQwNzgsImV4cCI6MjA5NTQwMDA3OH0.B7akZMoAdrjF7CiLMNHvTOmO1dapHTlkEL8fbho30Us';
 
-const GENRE_LABEL = {kpop:'K-Pop',jpop:'J-Pop',pop:'Pop',cn:'중국',etc:'기타'};
-const GENRE_CLASS = {kpop:'g-kpop',jpop:'g-jpop',pop:'g-pop',cn:'g-cn',etc:'g-etc'};
+const GENRE_LABEL = {kpop:'K-Pop',jpop:'J-Pop',pop:'Pop',cn:'중국',aegyo:'애교송',etc:'기타'};
+const GENRE_CLASS = {kpop:'g-kpop',jpop:'g-jpop',pop:'g-pop',cn:'g-cn',aegyo:'g-aegyo',etc:'g-etc'};
 
 let allSongs = [];
 let curGenre = 'all';

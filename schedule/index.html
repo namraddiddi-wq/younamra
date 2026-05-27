@@ -7,6 +7,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <style>
+@font-face{font-family:'A2z';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-4Regular.woff2')format('woff2');font-weight:400;font-display:swap;}
+@font-face{font-family:'A2z';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-6SemiBold.woff2')format('woff2');font-weight:600;font-display:swap;}
+@font-face{font-family:'A2z';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-7Bold.woff2')format('woff2');font-weight:700;font-display:swap;}
+</style>
+<style>
 :root {
   --primary:#6dcdd0;--primary-light:#9de0e2;--primary-pale:#e8f9f9;
   --primary-dark:#4ab8bc;--primary-deep:#2a8a8d;
@@ -18,16 +23,16 @@
   --status-anniversary: #fff5e0;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Noto Sans KR',sans-serif;background:#f0fbfb;color:var(--text);}
+body{font-family:'A2z','Noto Sans KR',sans-serif;background:#f0fbfb;color:var(--text);}
 nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1.5px solid var(--primary-pale);display:flex;justify-content:center;}
-nav a{font-family:'Gowun Dodum',sans-serif;font-size:.95rem;color:var(--text-muted);text-decoration:none;padding:16px 36px;border-bottom:2.5px solid transparent;transition:color .2s,border-color .2s;}
+nav a{font-family:'A2z',sans-serif;font-size:.95rem;color:var(--text-muted);text-decoration:none;padding:16px 36px;border-bottom:2.5px solid transparent;transition:color .2s,border-color .2s;}
 nav a:hover,nav a.active{color:var(--primary-deep);border-bottom-color:var(--primary);}
 main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
-.page-head{font-family:'Gowun Dodum',sans-serif;font-size:1.5rem;color:var(--primary-deep);margin-bottom:24px;}
+.page-head{font-family:'A2z',sans-serif;font-size:1.5rem;color:var(--primary-deep);margin-bottom:24px;}
 
 /* CAL HEADER */
 .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-.cal-title{font-family:'Gowun Dodum',sans-serif;font-size:1.2rem;color:var(--text);}
+.cal-title{font-family:'A2z',sans-serif;font-size:1.2rem;color:var(--text);}
 .cal-btn{width:36px;height:36px;border:1.5px solid var(--gray-200);border-radius:10px;background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:all .2s;}
 .cal-btn:hover{background:var(--primary-pale);border-color:var(--primary);}
 
@@ -56,7 +61,7 @@ main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
 
 /* DETAIL */
 .detail-card{background:var(--white);border-radius:16px;padding:24px;box-shadow:0 3px 20px var(--shadow);}
-.detail-date{font-family:'Gowun Dodum',sans-serif;font-size:1.1rem;color:var(--primary-deep);margin-bottom:16px;}
+.detail-date{font-family:'A2z',sans-serif;font-size:1.1rem;color:var(--primary-deep);margin-bottom:16px;}
 .slot-row{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--gray-100);}
 .slot-row:last-child{border-bottom:none;}
 .slot-time{font-size:.85rem;font-weight:700;color:var(--primary);min-width:50px;padding-top:2px;}
