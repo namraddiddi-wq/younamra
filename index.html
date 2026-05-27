@@ -29,8 +29,7 @@ body{font-family:'A2z','Noto Sans KR',sans-serif;background:#f0fbfb;color:var(--
 /* 히어로 full-width 배경 */
 .hero-outer{
   background:linear-gradient(135deg,var(--primary-pale) 0%,#f0fbfb 100%);
-  width:calc(100% + 40px);
-  margin:0 -20px;
+  width:100%;
   padding:0 20px;
   margin-bottom:0;
 }
@@ -45,7 +44,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.88);backdrop-
 nav a{font-family:'A2z',sans-serif;font-size:.95rem;color:var(--text-muted);text-decoration:none;padding:16px 36px;border-bottom:2.5px solid transparent;transition:color .2s,border-color .2s;}
 nav a:hover,nav a.active{color:var(--primary-deep);border-bottom-color:var(--primary);}
 
-main{max-width:960px;margin:0 auto;padding:0 20px 80px;}
+main{max-width:960px;margin:0 auto;padding:32px 20px 80px;}
 .fade-up{opacity:0;transform:translateY(24px);transition:opacity .5s ease,transform .5s ease;}
 .fade-up.visible{opacity:1;transform:translateY(0);}
 .sec-head{font-family:'A2z',sans-serif;font-size:1.05rem;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
@@ -216,8 +215,7 @@ main{max-width:960px;margin:0 auto;padding:0 20px 80px;}
 .bc-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.12em;color:var(--primary-deep);text-transform:uppercase;margin-bottom:4px;}
 .bc-title{font-family:'A2z',sans-serif;font-size:1.3rem;color:var(--text);margin-bottom:18px;font-weight:600;}
 
-/* goal-card 배경 제거 (큐피 스타일 — 카드 없이 리스트만) */
-.goal-card{background:none;border-radius:0;padding:0;box-shadow:none;}
+/* goal-card — 큐피 스타일: 리스트만, 배경 유지 */
 
 /* FOOTER */
 footer{text-align:center;padding:26px 20px;color:var(--gray-400);font-size:.78rem;border-top:1px solid var(--gray-200);}
@@ -245,7 +243,7 @@ footer{text-align:center;padding:26px 20px;color:var(--gray-400);font-size:.78re
   <a href="./upbo/">업보</a>
 </nav>
 
-<main>
+
 
 <!-- ① 히어로 -->
 <div class="hero-outer fade-up">
@@ -305,6 +303,7 @@ footer{text-align:center;padding:26px 20px;color:var(--gray-400);font-size:.78re
 </div>
 </div>
 
+<main>
 <!-- ② 컨텐츠 + 목표 -->
 <div class="fade-up broadcast-outer">
   <div class="broadcast-wrap">
