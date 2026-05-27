@@ -37,16 +37,14 @@ main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
   padding:30px;box-shadow:0 4px 28px var(--shadow);
   margin-bottom:16px;
   display:grid;
-  /* 좌: 30% 프사 / 우: 나머지 */
-  grid-template-columns: 30% 1fr;
+  grid-template-columns:30% 1fr;
   gap:28px;
   align-items:stretch;
 }
 
-/* 프사 — 원형 */
+/* 프사 — 원형, 우측 높이와 동일하게 */
 .avatar-wrap{
-  width:100%;
-  aspect-ratio:1;
+  width:100%;height:100%;
   border-radius:50%;
   background:linear-gradient(135deg,var(--primary-pale),var(--accent-soft));
   border:3px solid var(--primary-light);
@@ -55,20 +53,22 @@ main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
 }
 .avatar-wrap img{width:100%;height:100%;object-fit:cover;}
 
-/* 우측 전체 컬럼 */
+/* 우측 전체 컬럼 — 프사 높이 기준으로 stretch */
 .profile-right{
   display:flex;flex-direction:column;gap:14px;
+  justify-content:space-between;
 }
 
-/* 이름 + 플랫폼 버튼 — 같은 행, 이름 왼쪽 버튼 오른쪽 */
+/* 이름(좌) + 플랫폼 버튼(우) */
 .name-platform-row{
   display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
 }
 .name-platform-row h1{
   font-family:'Gowun Dodum',sans-serif;
-  font-size:2.6rem;
+  font-size:clamp(3rem,5vw,4.2rem);
   color:var(--text);
-  line-height:1.1;
+  line-height:1;
+  letter-spacing:-.02em;
 }
 .platform-btns{display:flex;gap:7px;flex-wrap:wrap;}
 .pchip{display:inline-flex;align-items:center;gap:5px;padding:6px 15px;border-radius:20px;font-size:.83rem;font-weight:700;text-decoration:none;background:transparent;transition:background .18s,transform .15s;border-width:2.5px;border-style:solid;}
