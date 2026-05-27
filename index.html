@@ -174,7 +174,7 @@ main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
 
 .sig-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
 .sig-item{aspect-ratio:1;border-radius:10px;background:linear-gradient(135deg,var(--primary-pale),var(--accent-soft));border:1.5px dashed var(--primary-light);display:flex;align-items:center;justify-content:center;color:var(--primary-light);font-size:1rem;overflow:hidden;transition:transform .18s;}
-.sig-item:hover{transform:scale(1.05);}
+.sig-item{cursor:pointer;}.sig-item:hover{transform:scale(1.05);}
 .sig-item img{width:100%;height:100%;object-fit:cover;}
 
 .api-list{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
@@ -336,14 +336,14 @@ footer{text-align:center;padding:26px 20px;color:var(--gray-400);font-size:.78re
   <div class="bottom-card">
     <div class="card-label">🖼️ 시그풍</div>
     <div class="sig-grid">
-      <div class="sig-item"><img src="./assets/sig1.png" alt="시그풍1"></div>
-      <div class="sig-item"><img src="./assets/sig2.png" alt="시그풍2"></div>
-      <div class="sig-item"><img src="./assets/sig3.png" alt="시그풍3"></div>
-      <div class="sig-item"><img src="./assets/sig4.png" alt="시그풍4"></div>
-      <div class="sig-item"><img src="./assets/sig5.png" alt="시그풍5"></div>
-      <div class="sig-item"><img src="./assets/sig6.png" alt="시그풍6"></div>
-      <div class="sig-item"><img src="./assets/sig7.png" alt="시그풍7"></div>
-      <div class="sig-item"><img src="./assets/sig8.png" alt="시그풍8"></div>
+      <div class="sig-item" onclick="openLightbox('./assets/sig1.png')"><img src="./assets/sig1.png" alt="시그풍1"></div>
+      <div class="sig-item" onclick="openLightbox('./assets/sig2.png')"><img src="./assets/sig2.png" alt="시그풍2"></div>
+      <div class="sig-item" onclick="openLightbox('./assets/sig3.png')"><img src="./assets/sig3.png" alt="시그풍3"></div>
+      <div class="sig-item" onclick="openLightbox('./assets/sig4.png')"><img src="./assets/sig4.png" alt="시그풍4"></div>
+      <div class="sig-item" onclick="openLightbox('./assets/sig5.png')"><img src="./assets/sig5.png" alt="시그풍5"></div>
+      <div class="sig-item" onclick="openLightbox('./assets/sig6.png')"><img src="./assets/sig6.png" alt="시그풍6"></div>
+      <div class="sig-item" onclick="openLightbox('./assets/sig7.png')"><img src="./assets/sig7.png" alt="시그풍7"></div>
+      <div class="sig-item" onclick="openLightbox('./assets/sig8.png')"><img src="./assets/sig8.png" alt="시그풍8"></div>
     </div>
   </div>
   <div class="bottom-card">
@@ -382,6 +382,43 @@ const today = new Date().getDay();
 document.querySelectorAll('.day').forEach(d => {
   if(parseInt(d.dataset.day) === today){d.classList.remove('off','on');d.classList.add('today');}
 });
+</script>
+
+<!-- 라이트박스 -->
+<div id="lightbox" onclick="closeLightbox()" style="
+  display:none;position:fixed;inset:0;z-index:999;
+  background:rgba(0,0,0,.75);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;
+">
+  <div onclick="event.stopPropagation()" style="
+    background:#fff;border-radius:16px;
+    padding:16px;box-shadow:0 12px 48px rgba(0,0,0,.4);
+    max-width:min(90vw,600px);max-height:90vh;
+    display:flex;flex-direction:column;align-items:center;gap:12px;
+    animation:lbIn .2s ease;
+  ">
+    <img id="lbImg" src="" style="max-width:100%;max-height:75vh;border-radius:8px;display:block;">
+    <button onclick="closeLightbox()" style="
+      padding:7px 24px;border-radius:20px;border:1.5px solid var(--primary);
+      background:none;color:var(--primary-deep);font-family:'A2z',sans-serif;
+      font-size:.85rem;cursor:pointer;
+    ">닫기</button>
+  </div>
+</div>
+<style>
+@keyframes lbIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+</style>
+<script>
+function openLightbox(src){
+  document.getElementById('lbImg').src=src;
+  const lb=document.getElementById('lightbox');
+  lb.style.display='flex';
+}
+function closeLightbox(){
+  document.getElementById('lightbox').style.display='none';
+  document.getElementById('lbImg').src='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
 </script>
 </body>
 </html>
