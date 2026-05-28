@@ -167,7 +167,7 @@ function selectDate(dd) {
   if (!sc) {
     inner += `<div class="no-sched">등록된 일정이 없어요</div>`;
   } else if (sc.status==='holiday') {
-    inner += `<div class="slot-row"><div class="slot-time">🛌</div><div><div class="slot-title">정기 휴방</div>${sc.note?`<div class="slot-note">${sc.note}</div>`:''}</div></div>`;
+    inner += `<div class="slot-row"><div class="slot-time">🛌</div><div><div class="slot-title">휴방</div>${sc.note?`<div class="slot-note">${sc.note}</div>`:''}</div></div>`;
   } else if (sc.status==='anniversary') {
     inner += `<div class="slot-row"><div class="slot-time">🎉</div><div><div class="slot-title">기념일</div>${sc.note?`<div class="slot-note">${sc.note}</div>`:''}</div></div>`;
   } else {

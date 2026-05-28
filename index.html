@@ -455,7 +455,7 @@ document.querySelectorAll('.fade-up').forEach(el => {
     const note = document.getElementById('schedNote');
     if (todaySc) {
       if (todaySc.status === 'holiday') {
-        note.textContent = '오늘은 휴방이에요 🌙' + (todaySc.note ? ' · ' + todaySc.note : '');
+        note.textContent = '오늘은 휴방이에요 🌙';
       } else if (todaySc.slot1_title) {
         note.textContent = (todaySc.slot1_time ? todaySc.slot1_time + ' ' : '') + todaySc.slot1_title
           + (todaySc.slot2_title ? ' · ' + (todaySc.slot2_time ? todaySc.slot2_time + ' ' : '') + todaySc.slot2_title : '');
