@@ -690,9 +690,9 @@ function renderTaskGrid(){
     <div class="t-card">
       <span class="t-name">${t.name}</span>
       <div class="t-qty">
-        <button onclick="adjustTask(${t.id},-1)">−</button>
+        <button onclick="adjustTask('${t.id}',-1)">−</button>
         <span id="qty-${t.id}">${taskPending[t.id]||0}</span>
-        <button onclick="adjustTask(${t.id},1)">+</button>
+        <button onclick="adjustTask('${t.id}',1)">+</button>
       </div>
     </div>`).join('');
 }
