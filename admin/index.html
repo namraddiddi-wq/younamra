@@ -707,7 +707,7 @@ function clearAllTasks(){
 }
 async function saveTasks(){
   if(!selMemberId){toast('시청자를 선택해주세요');return;}
-  const inserts=Object.entries(taskPending).filter(([,q])=>q>0).map(([tid,qty])=>({member_id:selMemberId,type_id:parseInt(tid),quantity:qty}));
+  const inserts=Object.entries(taskPending).filter(([,q])=>q>0).map(([tid,qty])=>({member_id:selMemberId,type_id:tid,quantity:qty}));
   if(inserts.length){
     const{error}=await supabaseClient.from('upbo_tasks').insert(inserts);
     if(error){toast('저장 실패: '+error.message);return;}
