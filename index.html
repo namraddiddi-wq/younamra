@@ -412,19 +412,19 @@ document.querySelectorAll('.fade-up').forEach(el => {
         if (sc.status === 'holiday') {
           chip.className = 'day off';
           chip.style = '';
-          chip.innerHTML = `<span class="day-name">${dayLabel}</span><span class="day-type">휴방</span>`;
+          chip.innerHTML = `<div class="day-name">${dayLabel}</div><div class="day-type">휴방</div>`;
         } else if (sc.status === 'anniversary') {
           chip.className = 'day on has-sched';
           chip.style.cssText = 'background:#fff5e0;color:#a08000;border-color:#fcd34d;';
-          chip.innerHTML = `<span class="day-name">${dayLabel}</span><span class="day-type">기념일</span>`;
+          chip.innerHTML = `<div class="day-name">${dayLabel}</div><div class="day-type">기념일</div>`;
         } else if (sc.status === 'special') {
           chip.className = 'day on has-sched';
           chip.style.cssText = 'background:#f0e8ff;color:#7040c0;border-color:#c9b3ff;';
-          chip.innerHTML = `<span class="day-name">${dayLabel}</span><span class="day-type">특방</span>${sc.slot1_time?`<span class="day-time">${sc.slot1_time}</span>`:''}`;
+          chip.innerHTML = `<div class="day-name">${dayLabel}</div><div class="day-type">특방</div>${sc.slot1_time?`<div class="day-time">${sc.slot1_time}</div>`:''}`;
         } else {
           chip.className = 'day on has-sched';
           chip.style = '';
-          chip.innerHTML = `<span class="day-name">${dayLabel}</span><span class="day-type">방송</span>${sc.slot1_time?`<span class="day-time">${sc.slot1_time}</span>`:''}`;
+          chip.innerHTML = `<div class="day-name">${dayLabel}</div><div class="day-type">방송</div>${sc.slot1_time?`<div class="day-time">${sc.slot1_time}</div>`:''}`;
         }
         if (sc.status !== 'holiday') {
           chip.onclick = () => openSchedPopup(sc);
@@ -433,11 +433,11 @@ document.querySelectorAll('.fade-up').forEach(el => {
         if (i === 0) {
           chip.className = 'day off';
           chip.style = '';
-          chip.innerHTML = `<span class="day-name">${dayLabel}</span><span class="day-type">휴방</span>`;
+          chip.innerHTML = `<div class="day-name">${dayLabel}</div><div class="day-type">휴방</div>`;
         } else {
           chip.className = 'day on';
           chip.style = '';
-          chip.innerHTML = `<span class="day-name">${dayLabel}</span>`;
+          chip.innerHTML = `<div class="day-name">${dayLabel}</div>`;
         }
       }
 
