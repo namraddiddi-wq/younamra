@@ -410,9 +410,9 @@ document.querySelectorAll('.fade-up').forEach(el => {
 
       if (sc) {
         if (sc.status === 'holiday') {
-          chip.className = 'day off';
+          chip.className = 'day off has-sched';
           chip.style = '';
-          chip.innerHTML = `<div class="day-name">${dayLabel}</div><div class="day-type">휴방</div>`;
+          chip.innerHTML = `<div class="day-name">${dayLabel}</div><div class="day-type">휴방</div>${sc.note?`<div class="day-time">${sc.note.slice(0,4)}</div>`:''}`;
         } else if (sc.status === 'anniversary') {
           chip.className = 'day on has-sched';
           chip.style.cssText = 'background:#fff5e0;color:#a08000;border-color:#fcd34d;';
@@ -426,9 +426,7 @@ document.querySelectorAll('.fade-up').forEach(el => {
           chip.style = '';
           chip.innerHTML = `<div class="day-name">${dayLabel}</div><div class="day-type">방송</div>${sc.slot1_time?`<div class="day-time">${sc.slot1_time}</div>`:''}`;
         }
-        if (sc.status !== 'holiday') {
-          chip.onclick = () => openSchedPopup(sc);
-        }
+        chip.onclick = () => openSchedPopup(sc);
       } else {
         if (i === 0) {
           chip.className = 'day off';
