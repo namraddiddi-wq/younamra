@@ -657,8 +657,8 @@ function renderMemberList(list){
     <div class="member-drag-item" draggable="true" data-id="${m.id}">
       <span class="drag-handle">⠿</span>
       <span style="font-size:13px;font-weight:600;flex:1;">${m.nickname}${m.user_id?` <span style="font-size:11px;color:var(--text-mut);">(${m.user_id})</span>`:''}</span>
-      <button class="btn-edit" onclick="editMember(${m.id})">수정</button>
-      <button class="btn-del" onclick="delMember(${m.id})">삭제</button>
+      <button class="btn-edit" onclick="editMember('${m.id}')">수정</button>
+      <button class="btn-del" onclick="delMember('${m.id}')">삭제</button>
     </div>`).join('')}
   </div>`;
   initMemberDragDrop();
@@ -666,7 +666,7 @@ function renderMemberList(list){
 function renderAssignMemberGrid(list){
   const el=document.getElementById('assignMemberGrid');
   el.innerHTML=list.map(m=>`
-    <div class="m-card${selMemberId===m.id?' sel':''}" onclick="selectMember(${m.id})">
+    <div class="m-card${selMemberId===m.id?' sel':''}" onclick="selectMember('${m.id}')">
       ${m.nickname}
       ${m.user_id?`<div class="m-uid">${m.user_id}</div>`:''}
     </div>`).join('');
