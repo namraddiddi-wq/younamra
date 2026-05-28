@@ -366,11 +366,7 @@ document.querySelectorAll('.fade-up').forEach(el => {
   if(el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
 });
 
-// 오늘 요일 하이라이트
-const today = new Date().getDay();
-document.querySelectorAll('.day').forEach(d => {
-  if(parseInt(d.dataset.day) === today){d.classList.remove('off','on');d.classList.add('today');}
-});
+// 오늘 요일 하이라이트는 Supabase 로직 안에서 처리
 
 // 이번주 스케줄 Supabase 연동
 (async () => {
@@ -395,11 +391,9 @@ document.querySelectorAll('.day').forEach(d => {
       .lte('date', fmt(sunday))
       .order('date');
 
-    if (!data || !data.length) return;
-
     // schedMap: date → schedule
     const schedMap = {};
-    data.forEach(s => { schedMap[s.date] = s; });
+    (data||[]).forEach(s => { schedMap[s.date] = s; });
 
     // 요일 칩 업데이트
     const grid = document.getElementById('weekGrid');
@@ -471,7 +465,7 @@ document.querySelectorAll('.day').forEach(d => {
       }
     }
   } catch(e) {
-    // 연동 실패 시 기본값 유지
+    console.error('스케줄 연동 실패:', e);
   }
 })();
 </script>
