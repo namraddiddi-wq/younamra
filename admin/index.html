@@ -566,8 +566,8 @@ function renderTypeList(){
       <span class="drag-handle">⠿</span>
       <span class="badge" style="background:${t.category==='event'?'#fde8f0':'var(--primary-lt)'};color:${t.category==='event'?'#be185d':'var(--primary-dk)'};">${t.category==='event'?'이벤트':'일반'}</span>
       <span style="font-size:13px;font-weight:600;flex:1;">${t.name}</span>
-      <button class="btn-edit" onclick="editTaskType(${t.id})">수정</button>
-      <button class="btn-del" onclick="delTaskType(${t.id})">삭제</button>
+      <button class="btn-edit" onclick="editTaskType('${t.id}')">수정</button>
+      <button class="btn-del" onclick="delTaskType('${t.id}')">삭제</button>
     </div>`).join('')}
   </div>`;
   initTypeDragDrop();
@@ -590,8 +590,8 @@ function initTypeDragDrop(){
 }
 async function saveTypeOrder(){
   const items=[...document.querySelectorAll('#typeListInner .type-drag-item')];
-  await Promise.all(items.map((el,i)=>supabaseClient.from('upbo_task_types').update({sort_order:i}).eq('id',parseInt(el.dataset.id))));
-  taskTypes=items.map(el=>taskTypes.find(t=>t.id===parseInt(el.dataset.id))).filter(Boolean);
+  await Promise.all(items.map((el,i)=>supabaseClient.from('upbo_task_types').update({sort_order:i}).eq('id',el.dataset.id)));
+  taskTypes=items.map(el=>taskTypes.find(t=>t.id===el.dataset.id)).filter(Boolean);
   toast('✅ 순서 저장됨');
 }
 async function addTaskType(){
@@ -739,7 +739,7 @@ function initMemberDragDrop(){
 }
 async function saveMemberOrder(){
   const items=[...document.querySelectorAll('#memberListInner .member-drag-item')];
-  await Promise.all(items.map((el,i)=>supabaseClient.from('upbo_members').update({sort_order:i}).eq('id',parseInt(el.dataset.id))));
+  await Promise.all(items.map((el,i)=>supabaseClient.from('upbo_members').update({sort_order:i}).eq('id',el.dataset.id)));
   toast('✅ 순서 저장됨');
 }
 async function addMember(){
