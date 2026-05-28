@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- 배경 원 -->
+  <circle cx="32" cy="32" r="30" fill="#e8f9f9" stroke="#6dcdd0" stroke-width="3"/>
+  <!-- 얼굴 -->
+  <circle cx="32" cy="32" r="18" fill="#fff"/>
+  <!-- 눈 왼쪽 -->
+  <ellipse cx="25" cy="29" rx="3.5" ry="4" fill="#6dcdd0"/>
+  <ellipse cx="25" cy="28" rx="1.5" ry="1.5" fill="#fff"/>
+  <!-- 눈 오른쪽 -->
+  <ellipse cx="39" cy="29" rx="3.5" ry="4" fill="#6dcdd0"/>
+  <ellipse cx="39" cy="28" rx="1.5" ry="1.5" fill="#fff"/>
+  <!-- 볼터치 -->
+  <ellipse cx="22" cy="35" rx="4" ry="2" fill="#ffb3cc" opacity="0.5"/>
+  <ellipse cx="42" cy="35" rx="4" ry="2" fill="#ffb3cc" opacity="0.5"/>
+  <!-- 입 -->
+  <path d="M27 37 Q32 41 37 37" stroke="#6dcdd0" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>
