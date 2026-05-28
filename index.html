@@ -303,7 +303,7 @@ footer{text-align:center;padding:26px 20px;color:var(--gray-400);font-size:.78re
 <div class="fade-up" style="margin-bottom:20px;">
   <div class="sec-head"><span class="badge">📅</span>이번주 스케줄</div>
   <div class="schedule-card">
-    <div class="week-grid">
+    <div class="week-grid" id="weekGrid">
       <div class="day off" data-day="1">월<small>휴방</small></div>
       <div class="day on"  data-day="2">화</div>
       <div class="day on"  data-day="3">수</div>
@@ -312,7 +312,7 @@ footer{text-align:center;padding:26px 20px;color:var(--gray-400);font-size:.78re
       <div class="day on"  data-day="6">토</div>
       <div class="day on"  data-day="0">일</div>
     </div>
-    <div class="sched-note">매일 오후 5시 방송 · 월요일 정기휴방</div>
+    <div class="sched-note" id="schedNote">매일 오후 5시 방송 · 월요일 정기휴방</div>
   </div>
 </div>
 
@@ -356,6 +356,7 @@ footer{text-align:center;padding:26px 20px;color:var(--gray-400);font-size:.78re
 
 <footer>유남라 팬사이트 · 팬 이름 유랑이 · 팬닉 뒤에 ^´</footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const io = new IntersectionObserver(entries => {
   entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);} });
@@ -364,10 +365,87 @@ document.querySelectorAll('.fade-up').forEach(el => {
   io.observe(el);
   if(el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
 });
+
+// 오늘 요일 하이라이트
 const today = new Date().getDay();
 document.querySelectorAll('.day').forEach(d => {
   if(parseInt(d.dataset.day) === today){d.classList.remove('off','on');d.classList.add('today');}
 });
+
+// 이번주 스케줄 Supabase 연동
+(async () => {
+  const SUPABASE_URL  = 'https://xigbjaayjqshjulsovqn.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpZ2JqYWF5anFzaGp1bHNvdnFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MjQwNzgsImV4cCI6MjA5NTQwMDA3OH0.B7akZMoAdrjF7CiLMNHvTOmO1dapHTlkEL8fbho30Us';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  // 이번주 월~일 날짜 계산
+  const now = new Date();
+  const dow = now.getDay(); // 0=일
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - (dow === 0 ? 6 : dow - 1));
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+
+  const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+
+  try {
+    const { data } = await sb.from('schedules')
+      .select('*')
+      .gte('date', fmt(monday))
+      .lte('date', fmt(sunday))
+      .order('date');
+
+    if (!data || !data.length) return;
+
+    // schedMap: date → schedule
+    const schedMap = {};
+    data.forEach(s => { schedMap[s.date] = s; });
+
+    // 요일 칩 업데이트
+    const grid = document.getElementById('weekGrid');
+    const chips = grid.querySelectorAll('.day');
+    const dayOrder = [1,2,3,4,5,6,0]; // 월~일
+
+    chips.forEach((chip, i) => {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      const dateStr = fmt(d);
+      const sc = schedMap[dateStr];
+      if (!sc) return;
+
+      if (sc.status === 'holiday') {
+        chip.classList.remove('on','today');
+        chip.classList.add('off');
+        chip.innerHTML = chip.textContent.trim().charAt(0) + '<small>휴방</small>';
+      } else if (sc.status === 'special') {
+        chip.classList.remove('off');
+        chip.classList.add('on');
+        chip.style.background = '#f0e8ff';
+        chip.style.color = '#7040c0';
+        chip.style.borderColor = '#c9b3ff';
+      } else if (sc.slot1_title) {
+        chip.classList.remove('off');
+        chip.classList.add('on');
+        chip.title = (sc.slot1_time || '') + ' ' + sc.slot1_title;
+      }
+    });
+
+    // 오늘 스케줄 note 업데이트
+    const todayStr = fmt(now);
+    const todaySc = schedMap[todayStr];
+    const note = document.getElementById('schedNote');
+    if (todaySc) {
+      if (todaySc.status === 'holiday') {
+        note.textContent = '오늘은 휴방이에요 🌙' + (todaySc.note ? ' · ' + todaySc.note : '');
+      } else if (todaySc.slot1_title) {
+        note.textContent = (todaySc.slot1_time ? todaySc.slot1_time + ' ' : '') + todaySc.slot1_title
+          + (todaySc.slot2_title ? ' · ' + (todaySc.slot2_time ? todaySc.slot2_time + ' ' : '') + todaySc.slot2_title : '');
+      }
+    }
+  } catch(e) {
+    // 연동 실패 시 기본값 유지
+  }
+})();
 </script>
 
 <!-- 라이트박스 -->
