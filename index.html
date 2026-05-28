@@ -406,45 +406,44 @@ document.querySelectorAll('.fade-up').forEach(el => {
       const sc = schedMap[dateStr];
       const dayLabel = ['월','화','수','목','금','토','일'][i];
 
-      // DB에 등록된 스케줄 있으면 그걸로
+      const statusLabel = {normal:'방송', holiday:'휴방', special:'특방', anniversary:'기념일', collab:'합방', event:'이벤트'};
+
       if (sc) {
         if (sc.status === 'holiday') {
           chip.className = 'day off';
           chip.style = '';
-          chip.innerHTML = dayLabel + '<small>휴방</small>';
-        } else if (sc.status === 'special') {
-          chip.className = 'day on';
-          chip.style.cssText = 'background:#f0e8ff;color:#7040c0;border-color:#c9b3ff;';
-          chip.innerHTML = dayLabel + (sc.note ? `<small>${sc.note.slice(0,3)}</small>` : '');
-          if (sc.slot1_title) chip.title = (sc.slot1_time||'') + ' ' + sc.slot1_title;
+          chip.innerHTML = `<span class="day-name">${dayLabel}</span><span class="day-type">휴방</span>`;
         } else if (sc.status === 'anniversary') {
-          chip.className = 'day on';
+          chip.className = 'day on has-sched';
           chip.style.cssText = 'background:#fff5e0;color:#a08000;border-color:#fcd34d;';
-          chip.innerHTML = dayLabel + '<small>기념일</small>';
+          chip.innerHTML = `<span class="day-name">${dayLabel}</span><span class="day-type">기념일</span>`;
+        } else if (sc.status === 'special') {
+          chip.className = 'day on has-sched';
+          chip.style.cssText = 'background:#f0e8ff;color:#7040c0;border-color:#c9b3ff;';
+          chip.innerHTML = `<span class="day-name">${dayLabel}</span><span class="day-type">특방</span>${sc.slot1_time?`<span class="day-time">${sc.slot1_time}</span>`:''}`;
         } else {
-          // 일반 방송
-          chip.className = 'day on';
+          chip.className = 'day on has-sched';
           chip.style = '';
-          chip.innerHTML = dayLabel;
-          if (sc.slot1_title) chip.title = (sc.slot1_time||'') + ' ' + sc.slot1_title;
+          chip.innerHTML = `<span class="day-name">${dayLabel}</span><span class="day-type">방송</span>${sc.slot1_time?`<span class="day-time">${sc.slot1_time}</span>`:''}`;
+        }
+        if (sc.status !== 'holiday') {
+          chip.onclick = () => openSchedPopup(sc);
         }
       } else {
-        // DB 등록 없으면 기본값 (월=휴방, 나머지=방송)
-        if (i === 0) { // 월요일
+        if (i === 0) {
           chip.className = 'day off';
           chip.style = '';
-          chip.innerHTML = dayLabel + '<small>휴방</small>';
+          chip.innerHTML = `<span class="day-name">${dayLabel}</span><span class="day-type">휴방</span>`;
         } else {
           chip.className = 'day on';
           chip.style = '';
-          chip.innerHTML = dayLabel;
+          chip.innerHTML = `<span class="day-name">${dayLabel}</span>`;
         }
       }
 
-      // 오늘 표시 덮어쓰기
+      // 오늘 표시
       const todayDow = new Date().getDay();
-      const chipDow = parseInt(chip.dataset.day);
-      if (chipDow === todayDow) {
+      if (parseInt(chip.dataset.day) === todayDow) {
         chip.classList.add('today');
         chip.style.background = '';
         chip.style.color = '';
@@ -469,6 +468,18 @@ document.querySelectorAll('.fade-up').forEach(el => {
   }
 })();
 </script>
+
+
+<!-- 스케줄 팝업 -->
+<div id="schedPopup" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.3);backdrop-filter:blur(6px);align-items:center;justify-content:center;">
+  <div onclick="event.stopPropagation()" style="background:#fff;border-radius:20px;padding:24px;max-width:340px;width:90%;box-shadow:0 16px 48px rgba(109,205,208,.2);border:1.5px solid var(--primary-pale);animation:popIn .2s ease;">
+    <div id="schedPopupContent"></div>
+    <button onclick="document.getElementById('schedPopup').style.display='none'" style="width:100%;margin-top:16px;padding:10px;border-radius:12px;background:var(--primary-pale);color:var(--primary-deep);border:none;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;">닫기</button>
+  </div>
+</div>
+<style>
+@keyframes popIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+</style>
 
 <!-- 라이트박스 -->
 <div id="lightbox" onclick="closeLightbox()" style="
@@ -495,6 +506,43 @@ document.querySelectorAll('.fade-up').forEach(el => {
 @keyframes lbIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
 </style>
 <script>
+
+function openSchedPopup(sc) {
+  const statusLabel = {normal:'방송', special:'특방', anniversary:'기념일', collab:'합방', event:'이벤트'};
+  const statusColor = {normal:'var(--primary-deep)', special:'#7040c0', anniversary:'#a08000', collab:'#22c55e', event:'#f59e0b'};
+  const lbl = statusLabel[sc.status] || sc.status;
+  const col = statusColor[sc.status] || 'var(--primary-deep)';
+
+  let html = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+    <span style="padding:4px 12px;border-radius:20px;font-size:.78rem;font-weight:700;background:${col}22;color:${col};">${lbl}</span>
+    <span style="font-size:.82rem;color:var(--text-muted);">${sc.date}</span>
+  </div>`;
+
+  if (sc.slot1_title) {
+    html += `<div style="padding:12px 14px;background:var(--primary-pale);border-radius:12px;margin-bottom:8px;">
+      <div style="font-size:.72rem;color:var(--primary-deep);font-weight:600;margin-bottom:3px;">${sc.slot1_time||''}</div>
+      <div style="font-size:.92rem;font-weight:700;color:var(--text);">${sc.slot1_title}</div>
+    </div>`;
+  }
+  if (sc.slot2_title) {
+    html += `<div style="padding:12px 14px;background:var(--primary-pale);border-radius:12px;margin-bottom:8px;">
+      <div style="font-size:.72rem;color:var(--primary-deep);font-weight:600;margin-bottom:3px;">${sc.slot2_time||''}</div>
+      <div style="font-size:.92rem;font-weight:700;color:var(--text);">${sc.slot2_title}</div>
+    </div>`;
+  }
+  if (sc.note && sc.status !== 'normal') {
+    html += `<div style="font-size:.82rem;color:var(--text-muted);margin-top:8px;">${sc.note}</div>`;
+  }
+  if (!sc.slot1_title && !sc.slot2_title) {
+    html += `<div style="font-size:.88rem;color:var(--text-muted);text-align:center;padding:12px 0;">${lbl} 예정</div>`;
+  }
+
+  document.getElementById('schedPopupContent').innerHTML = html;
+  const popup = document.getElementById('schedPopup');
+  popup.style.display = 'flex';
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.getElementById('schedPopup').style.display='none'; });
+
 function openLightbox(src){
   document.getElementById('lbImg').src=src;
   const lb=document.getElementById('lightbox');
