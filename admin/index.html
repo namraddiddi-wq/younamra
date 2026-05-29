@@ -671,7 +671,7 @@ function renderAssignMemberGrid(list){
       ${m.user_id?`<div class="m-uid">${m.user_id}</div>`:''}
     </div>`).join('');
 }
-function selectMember(id){
+async function selectMember(id){
   selMemberId=id;taskPending={};
   const m=allMembers.find(x=>x.id===id);if(!m)return;
   document.getElementById('assignTitle').textContent=`${m.nickname} 업보 부여`;
@@ -681,6 +681,13 @@ function selectMember(id){
     const q=document.getElementById('assignSearch').value.toLowerCase();
     return !q||(x.nickname||'').toLowerCase().includes(q);
   }));
+
+  // 기존 업보 데이터 로드
+  const {data:existing}=await supabaseClient.from('upbo_tasks').select('*').eq('member_id',id);
+  (existing||[]).forEach(t=>{
+    taskPending[t.type_id]=(taskPending[t.type_id]||0)+(t.quantity||1);
+  });
+
   renderTaskGrid();
 }
 function renderTaskGrid(){
@@ -707,6 +714,10 @@ function clearAllTasks(){
 }
 async function saveTasks(){
   if(!selMemberId){toast('시청자를 선택해주세요');return;}
+
+  // 기존 업보 전부 삭제 후 현재 값으로 재삽입
+  await supabaseClient.from('upbo_tasks').delete().eq('member_id',selMemberId);
+
   const inserts=Object.entries(taskPending).filter(([,q])=>q>0).map(([tid,qty])=>({member_id:selMemberId,type_id:tid,quantity:qty}));
   if(inserts.length){
     const{error}=await supabaseClient.from('upbo_tasks').insert(inserts);
