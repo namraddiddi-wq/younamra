@@ -231,6 +231,7 @@ td.strong{color:var(--text);font-weight:600;}
         <div><label>제목 *</label><input type="text" id="songTitle" placeholder="곡명"></div>
       </div>
       <div style="margin-top:10px;display:flex;gap:10px;align-items:flex-end;">
+        <div><label>난이도 (1~5)</label><input type="number" id="songLevel" min="1" max="5" value="3" style="width:80px;"></div>
         <div style="flex:1;"><label>메모</label><input type="text" id="songMemo" placeholder="선택 메모"></div>
         <button class="btn btn-add" onclick="addSong()">추가</button>
       </div>
@@ -240,7 +241,7 @@ td.strong{color:var(--text);font-weight:600;}
       <div style="margin-bottom:12px;"><input type="text" id="songSearch" placeholder="🔍 검색..." oninput="filterSongs()"></div>
       <div class="tw">
         <table>
-          <thead><tr><th>제목</th><th>아티스트</th><th>장르</th><th>관리</th></tr></thead>
+          <thead><tr><th>제목</th><th>아티스트</th><th>장르</th><th>난이도</th><th>관리</th></tr></thead>
           <tbody id="songBody"><tr class="empty-row"><td colspan="4">불러오는 중...</td></tr></tbody>
         </table>
       </div>
@@ -528,6 +529,7 @@ function renderSongTable(list){
       <td class="strong">${s.title||'-'}</td>
       <td>${s.artist||'-'}</td>
       <td><span class="badge" style="background:var(--primary-lt);color:var(--primary-dk);">${GENRE_LABEL[s.genre]||'기타'}</span></td>
+      <td>${'⭐'.repeat(s.level||3)}</td>
       <td><button class="btn-del" onclick="delSong('${s.id}')">삭제</button></td>
     </tr>`).join(''):'<tr class="empty-row"><td colspan="4">없음</td></tr>';
 }
@@ -537,10 +539,11 @@ async function addSong(){
   const{error}=await supabaseClient.from('songs').insert([{
     title,artist:document.getElementById('songArtist').value.trim(),
     genre:document.getElementById('songGenre').value,
+    level:parseInt(document.getElementById('songLevel').value)||3,
     memo:document.getElementById('songMemo').value.trim()||null
   }]);
   if(error){toast('추가 실패');return;}
-  toast('✅ 추가!');['songTitle','songArtist','songMemo'].forEach(id=>document.getElementById(id).value='');
+  toast('✅ 추가!');['songTitle','songArtist','songMemo'].forEach(id=>document.getElementById(id).value='');document.getElementById('songLevel').value='3';
   loadSongs();
 }
 async function delSong(id){
