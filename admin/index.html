@@ -617,7 +617,7 @@ function editTaskType(id){
         <option value="normal"${t.category==='normal'?' selected':''}>일반</option>
         <option value="event"${t.category==='event'?' selected':''}>이벤트</option>
       </select></div>
-      <div style="text-align:right;"><button class="btn btn-add" onclick="saveTaskTypeEdit(${id})">저장</button></div>
+      <div style="text-align:right;"><button class="btn btn-add" onclick="saveTaskTypeEdit('${id}')">저장</button></div>
     </div>`;
   document.getElementById('editModal').classList.add('open');
 }
@@ -764,7 +764,7 @@ function editMember(id){
       <div><label>닉네임</label><input type="text" id="eMemberNick" value="${m.nickname}"></div>
       <div><label>SOOP ID</label><input type="text" id="eMemberUid" value="${m.user_id||''}"></div>
       <div><label>메모 (비공개)</label><textarea id="eMemberMemo">${m.memo||''}</textarea></div>
-      <div style="text-align:right;"><button class="btn btn-add" onclick="saveMemberEdit(${id})">저장</button></div>
+      <div style="text-align:right;"><button class="btn btn-add" onclick="saveMemberEdit('${id}')">저장</button></div>
     </div>`;
   document.getElementById('editModal').classList.add('open');
 }
