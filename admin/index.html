@@ -627,7 +627,7 @@ function editSchedule(id){
         <div><label>1부 시간</label><input type="time" id="eTime" value="${s.slot1_time||'17:00'}"></div>
         <div><label>1부 제목</label><input type="text" id="eTitle" value="${s.slot1_title||''}"></div>
         <div><label>2부 시간</label><input type="time" id="eTime2" value="${s.slot2_time||''}"></div>
-        <div><label>2부 제목</label><input type="text" id="eTitle2" value="${s.slot2_title||''}"></div>
+        <div style="display:flex;gap:6px;align-items:flex-end;"><div style="flex:1"><label>2부 제목</label><input type="text" id="eTitle2" value="${s.slot2_title||''}"></div><button type="button" class="btn-del" style="padding:9px 10px;flex-shrink:0;" onclick="document.getElementById('eTime2').value='';document.getElementById('eTitle2').value=''" title="2부 삭제">✕</button></div>
       </div>
       <div><label>메모</label><textarea id="eNote">${s.note||''}</textarea></div>
       <div style="text-align:right;"><button class="btn btn-add" onclick="saveScheduleEdit('${id}')">저장</button></div>
