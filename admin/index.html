@@ -198,7 +198,9 @@ td.strong{color:var(--text);font-weight:600;}
           <input type="text" id="sTitle2" placeholder="2부 있을 경우">
         </div>
       </div>
-      <div style="margin-top:12px;display:flex;align-items:center;gap:12px;">
+      <div style="margin-top:12px;display:flex;align-items:center;gap:10px;">
+        <div style="width:18px;height:18px;border-radius:6px;background:#6dcdd0;flex-shrink:0;transition:background .2s;" id="typeColorDot"></div>
+        <span style="font-size:12px;color:var(--text-sub);" id="typeColorLabel">방송</span>
         <button class="btn btn-add" style="margin-left:auto;" onclick="addSchedule()">추가</button>
       </div>
     </div>
@@ -569,6 +571,11 @@ function renderScheduleTable(){
   }).join('');
 }
 
+const SCHED_COLORS = {
+  broadcast:'#6dcdd0', rest:'#f0a8c8', collab:'#34d399',
+  contest:'#f97316', mc_server:'#60a5fa', event:'#a78bfa',
+  anniversary:'#fbbf24', special:'#a78bfa', other:'#94a3b8',
+};
 const TYPE_STATUS={broadcast:'normal',rest:'holiday',collab:'normal',contest:'special',mc_server:'special',event:'special',other:'normal'};
 const TYPE_LABEL={broadcast:'방송',rest:'휴방',collab:'합방',contest:'대회',mc_server:'마크서버',event:'이벤트',other:'기타'};
 
@@ -576,6 +583,12 @@ function onTypeChange(){
   const t=document.getElementById('sType').value;
   const isRest=t==='rest';
   document.getElementById('sTitle').placeholder=isRest?'(휴방)':TYPE_LABEL[t]||'방송 제목';
+  // 색상 미리보기
+  const color=SCHED_COLORS[t]||'#6dcdd0';
+  const dot=document.getElementById('typeColorDot');
+  const lbl=document.getElementById('typeColorLabel');
+  if(dot) dot.style.background=color;
+  if(lbl) lbl.textContent=TYPE_LABEL[t]||t;
 }
 
 async function addSchedule(){
