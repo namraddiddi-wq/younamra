@@ -218,7 +218,7 @@ function renderCal(y, m) {
         events += `<div class="cal-event" style="background:${color}" onclick="showEvent('${dd}')">휴방</div>`;
       } else {
         if (sc.slot1_title) events += `<div class="cal-event" style="background:${color}" onclick="showEvent('${dd}')">${sc.slot1_time||''} ${sc.slot1_title}</div>`;
-        if (sc.slot2_title) events += `<div class="cal-event" style="background:${TYPE_COLORS.collab}" onclick="showEvent('${dd}')">${sc.slot2_time||''} ${sc.slot2_title}</div>`;
+        if (sc.slot2_title) events += `<div class="cal-event" style="background:${TYPE_COLORS[sc.slot2_type]||TYPE_COLORS.collab}" onclick="showEvent('${dd}')">${sc.slot2_time||''} ${sc.slot2_title}</div>`;
         if (!sc.slot1_title) events += `<div class="cal-event" style="background:${color}" onclick="showEvent('${dd}')">${label}</div>`;
       }
     }

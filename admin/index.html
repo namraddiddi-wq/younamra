@@ -165,43 +165,57 @@ td.strong{color:var(--text);font-weight:600;}
   <div class="tab-content active" id="tab-schedule">
     <div class="sc">
       <div class="sc-title">➕ 일정 추가</div>
-      <div class="r3">
-        <div><label>날짜</label><input type="date" id="sDate"></div>
-        <div><label>유형</label>
-          <select id="sType" onchange="onTypeChange()">
-            <option value="broadcast">방송</option>
-            <option value="rest">휴방</option>
-            <option value="collab">합방</option>
-            <option value="contest">대회</option>
-            <option value="mc_server">마크서버</option>
-            <option value="event">이벤트</option>
-            <option value="other">기타</option>
-          </select>
-        </div>
-        <div><label>메모/설명</label><input type="text" id="sDesc" placeholder="선택 사항"></div>
+      <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:140px;"><label>날짜</label><input type="date" id="sDate"></div>
+        <div style="flex:1;min-width:140px;"><label>메모/설명</label><input type="text" id="sDesc" placeholder="선택 사항"></div>
       </div>
-      <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <div>
-          <label>1부 시간</label>
-          <input type="time" id="sTime" value="17:00">
+      <!-- 1부 -->
+      <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <div style="width:14px;height:14px;border-radius:4px;flex-shrink:0;transition:background .2s;" id="dot1"></div>
+          <span style="font-size:12px;font-weight:700;color:var(--text-sub);">1부</span>
         </div>
-        <div>
-          <label>1부 제목</label>
-          <input type="text" id="sTitle" placeholder="방송 제목">
-        </div>
-        <div>
-          <label>2부 시간 (선택)</label>
-          <input type="time" id="sTime2">
-        </div>
-        <div>
-          <label>2부 제목 (선택)</label>
-          <input type="text" id="sTitle2" placeholder="2부 있을 경우">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div><label>유형</label>
+            <select id="sType" onchange="onTypeChange()">
+              <option value="broadcast">방송</option>
+              <option value="rest">휴방</option>
+              <option value="collab">합방</option>
+              <option value="contest">대회</option>
+              <option value="mc_server">마크서버</option>
+              <option value="event">이벤트</option>
+              <option value="other">기타</option>
+            </select>
+          </div>
+          <div><label>시간</label><input type="time" id="sTime" value="17:00"></div>
+          <div><label>제목</label><input type="text" id="sTitle" placeholder="방송 제목"></div>
         </div>
       </div>
-      <div style="margin-top:12px;display:flex;align-items:center;gap:10px;">
-        <div style="width:18px;height:18px;border-radius:6px;background:#6dcdd0;flex-shrink:0;transition:background .2s;" id="typeColorDot"></div>
-        <span style="font-size:12px;color:var(--text-sub);" id="typeColorLabel">방송</span>
-        <button class="btn btn-add" style="margin-left:auto;" onclick="addSchedule()">추가</button>
+      <!-- 2부 -->
+      <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <div style="width:14px;height:14px;border-radius:4px;flex-shrink:0;transition:background .2s;" id="dot2"></div>
+          <span style="font-size:12px;font-weight:700;color:var(--text-sub);">2부 (선택)</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div><label>유형</label>
+            <select id="sType2" onchange="onType2Change()">
+              <option value="">없음</option>
+              <option value="broadcast">방송</option>
+              <option value="rest">휴방</option>
+              <option value="collab">합방</option>
+              <option value="contest">대회</option>
+              <option value="mc_server">마크서버</option>
+              <option value="event">이벤트</option>
+              <option value="other">기타</option>
+            </select>
+          </div>
+          <div><label>시간</label><input type="time" id="sTime2"></div>
+          <div><label>제목</label><input type="text" id="sTitle2" placeholder="2부 있을 경우"></div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:flex-end;">
+        <button class="btn btn-add" onclick="addSchedule()">추가</button>
       </div>
     </div>
     <div class="sc">
@@ -581,14 +595,14 @@ const TYPE_LABEL={broadcast:'방송',rest:'휴방',collab:'합방',contest:'대�
 
 function onTypeChange(){
   const t=document.getElementById('sType').value;
-  const isRest=t==='rest';
-  document.getElementById('sTitle').placeholder=isRest?'(휴방)':TYPE_LABEL[t]||'방송 제목';
-  // 색상 미리보기
-  const color=SCHED_COLORS[t]||'#6dcdd0';
-  const dot=document.getElementById('typeColorDot');
-  const lbl=document.getElementById('typeColorLabel');
-  if(dot) dot.style.background=color;
-  if(lbl) lbl.textContent=TYPE_LABEL[t]||t;
+  document.getElementById('sTitle').placeholder=t==='rest'?'(휴방)':TYPE_LABEL[t]||'방송 제목';
+  const dot=document.getElementById('dot1');
+  if(dot) dot.style.background=SCHED_COLORS[t]||'#6dcdd0';
+}
+function onType2Change(){
+  const t=document.getElementById('sType2').value;
+  const dot=document.getElementById('dot2');
+  if(dot) dot.style.background=t?SCHED_COLORS[t]||'#94a3b8':'#e5e7eb';
 }
 
 async function addSchedule(){
@@ -596,12 +610,14 @@ async function addSchedule(){
   if(!date){toast('날짜를 입력해주세요');return;}
   const type=document.getElementById('sType').value;
   const title=document.getElementById('sTitle').value.trim()||(type==='rest'?'휴방':'');
+  const type2=document.getElementById('sType2').value;
   const{error}=await supabaseClient.from('schedules').upsert([{
     date,
     status:TYPE_STATUS[type]||'normal',
     slot1_title:title||null,
     slot1_time:document.getElementById('sTime').value||'17:00',
     slot2_title:document.getElementById('sTitle2').value.trim()||null,
+    slot2_type:type2||null,
     slot2_time:document.getElementById('sTime2').value||null,
     note:document.getElementById('sDesc').value.trim()||TYPE_LABEL[type]||null,
   }],{onConflict:'date'});
@@ -636,11 +652,42 @@ function editSchedule(id){
         <option value="anniversary"${s.status==='anniversary'?' selected':''}>기념일</option>
         <option value="other"${s.status==='other'?' selected':''}>기타</option>
       </select></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div><label>1부 시간</label><input type="time" id="eTime" value="${s.slot1_time||'17:00'}"></div>
-        <div><label>1부 제목</label><input type="text" id="eTitle" value="${s.slot1_title||''}"></div>
-        <div><label>2부 시간</label><input type="time" id="eTime2" value="${s.slot2_time||''}"></div>
-        <div style="display:flex;gap:6px;align-items:flex-end;"><div style="flex:1"><label>2부 제목</label><input type="text" id="eTitle2" value="${s.slot2_title||''}"></div><button type="button" class="btn-del" style="padding:9px 10px;flex-shrink:0;" onclick="document.getElementById('eTime2').value='';document.getElementById('eTitle2').value=''" title="2부 삭제">✕</button></div>
+      <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px;margin-bottom:6px;">
+        <div style="font-size:11px;font-weight:700;color:var(--text-sub);margin-bottom:8px;">1부</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div><label>유형</label><select id="eStatus">
+            <option value="normal"${s.status==='normal'?' selected':''}>방송</option>
+            <option value="holiday"${s.status==='holiday'?' selected':''}>휴방</option>
+            <option value="special"${s.status==='special'?' selected':''}>특방</option>
+            <option value="collab"${s.status==='collab'?' selected':''}>합방</option>
+            <option value="contest"${s.status==='contest'?' selected':''}>대회</option>
+            <option value="mc_server"${s.status==='mc_server'?' selected':''}>마크서버</option>
+            <option value="event"${s.status==='event'?' selected':''}>이벤트</option>
+            <option value="anniversary"${s.status==='anniversary'?' selected':''}>기념일</option>
+            <option value="other"${s.status==='other'?' selected':''}>기타</option>
+          </select></div>
+          <div><label>시간</label><input type="time" id="eTime" value="${s.slot1_time||'17:00'}"></div>
+          <div style="grid-column:span 2"><label>제목</label><input type="text" id="eTitle" value="${s.slot1_title||''}"></div>
+        </div>
+      </div>
+      <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:11px;font-weight:700;color:var(--text-sub);">2부 (선택)</span>
+          <button type="button" class="btn-del" style="padding:4px 8px;font-size:11px;" onclick="document.getElementById('eTime2').value='';document.getElementById('eTitle2').value='';document.getElementById('eType2').value=''">초기화</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div><label>유형</label><select id="eType2">
+            <option value="" ${!s.slot2_type?' selected':''}>없음</option>
+            <option value="broadcast"${s.slot2_type==='broadcast'?' selected':''}>방송</option>
+            <option value="collab"${s.slot2_type==='collab'?' selected':''}>합방</option>
+            <option value="contest"${s.slot2_type==='contest'?' selected':''}>대회</option>
+            <option value="mc_server"${s.slot2_type==='mc_server'?' selected':''}>마크서버</option>
+            <option value="event"${s.slot2_type==='event'?' selected':''}>이벤트</option>
+            <option value="other"${s.slot2_type==='other'?' selected':''}>기타</option>
+          </select></div>
+          <div><label>시간</label><input type="time" id="eTime2" value="${s.slot2_time||''}"></div>
+          <div style="grid-column:span 2"><label>제목</label><input type="text" id="eTitle2" value="${s.slot2_title||''}"></div>
+        </div>
       </div>
       <div><label>메모</label><textarea id="eNote">${s.note||''}</textarea></div>
       <div style="text-align:right;"><button class="btn btn-add" onclick="saveScheduleEdit('${id}')">저장</button></div>
@@ -656,6 +703,7 @@ async function saveScheduleEdit(id){
     slot1_title:document.getElementById('eTitle').value.trim()||null,
     slot2_time:document.getElementById('eTime2').value||null,
     slot2_title:document.getElementById('eTitle2').value.trim()||null,
+    slot2_type:document.getElementById('eType2').value||null,
     note:document.getElementById('eNote').value.trim()||null
   }).eq('id',id);
   if(error){toast('수정 실패');return;}
