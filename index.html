@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>유남라</title>
+<style>
+@font-face{font-family:'A2z';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-2ExtraLight.woff2')format('woff2');font-weight:200;font-display:swap;}
+@font-face{font-family:'A2z';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-3Light.woff2')format('woff2');font-weight:300;font-display:swap;}
+@font-face{font-family:'A2z';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-4Regular.woff2')format('woff2');font-weight:400;font-display:swap;}
+@font-face{font-family:'A2z';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-5Medium.woff2')format('woff2');font-weight:500;font-display:swap;}
+@font-face{font-family:'A2z';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-6SemiBold.woff2')format('woff2');font-weight:600;font-display:swap;}
+@font-face{font-family:'A2z';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-7Bold.woff2')format('woff2');font-weight:700;font-display:swap;}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:#6dcdd0;--primary-light:#9de0e2;--primary-pale:#e8f9f9;
+  --primary-dark:#4ab8bc;--primary-deep:#2a8a8d;
+  --accent:#f0a8c8;--accent-soft:#fde8f2;
+  --white:#fff;--gray-100:#f7f7f7;--gray-200:#eee;--gray-400:#bbb;--gray-600:#888;
+  --text:#1c1c2e;--text-muted:#6b7280;--shadow:rgba(109,205,208,.15);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'A2z','Noto Sans KR',sans-serif;background:linear-gradient(160deg,var(--primary-pale) 0%,#f0fbfb 40%,#f0fbfb 100%);color:var(--text);min-height:100vh;}
+
+
+/* 히어로 full-width 배경 */
+
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1.5px solid var(--primary-pale);display:flex;justify-content:center;}
+nav a{font-family:'A2z',sans-serif;font-size:.95rem;color:var(--text-muted);text-decoration:none;padding:16px 36px;border-bottom:2.5px solid transparent;transition:color .2s,border-color .2s;}
+nav a:hover,nav a.active{color:var(--primary-deep);border-bottom-color:var(--primary);}
+
+main{max-width:960px;margin:0 auto;padding:32px 20px 80px;}
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity .5s ease,transform .5s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+.sec-head{font-family:'A2z',sans-serif;font-size:1.05rem;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sec-head .badge{width:24px;height:24px;background:var(--primary);border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem;}
+.card-label{font-family:'A2z',sans-serif;font-size:.9rem;color:var(--primary-deep);margin-bottom:12px;padding-left:9px;border-left:3px solid var(--primary);}
+
+/* ══════════════════════════
+   ① 히어로
+══════════════════════════ */
+.profile-hero{
+  background:transparent;
+  padding:32px 0;box-shadow:none;
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  gap:28px;
+  width:100%;
+  box-sizing:border-box;
+  overflow:hidden;
+}
+
+/* 프사 래퍼 — 글로우 포함 */
+.avatar-col{position:relative;flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:visible;}
+.avatar-glow{
+  position:absolute;width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(circle,rgba(109,205,208,.22) 0%,transparent 70%);
+  pointer-events:none;z-index:0;
+}
+.avatar-wrap{
+  position:relative;z-index:1;
+  width:280px;height:280px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--primary-pale),var(--accent-soft));
+  border:4px solid var(--primary-light);
+  box-shadow:0 12px 40px rgba(109,205,208,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:4rem;overflow:hidden;flex-shrink:0;
+}
+.avatar-wrap img{width:100%;height:100%;object-fit:cover;}
+
+/* 우측 전체 컬럼 — 프사 높이 기준으로 stretch */
+.profile-right{
+  flex:1;
+  min-width:0;
+  display:flex;flex-direction:column;gap:14px;
+  justify-content:space-between;
+}
+
+/* 이름(좌) + 플랫폼 버튼(우) */
+.name-platform-row{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+}
+.name-platform-row h1{
+  font-family:'A2z',sans-serif;
+  font-size:clamp(2rem,3.5vw,2.6rem);
+  color:var(--text);
+  line-height:1;
+  letter-spacing:-.02em;
+}
+.platform-btns{display:flex;gap:7px;flex-wrap:wrap;}
+.pchip{display:inline-flex;align-items:center;gap:5px;padding:6px 15px;border-radius:20px;font-size:.83rem;font-weight:700;text-decoration:none;background:transparent;transition:background .18s,transform .15s;border-width:2.5px;border-style:solid;}
+.pchip:hover{transform:translateY(-1px);}
+.pchip.soop{border-color:#3b82f6;color:#3b82f6;}
+.pchip.soop:hover{background:#3b82f61a;}
+.pchip.yt  {border-color:#ff0000;color:#ff0000;}
+.pchip.yt:hover{background:#ff00001a;}
+.pchip.cafe{border-color:#03c75a;color:#03c75a;}
+.pchip.cafe:hover{background:#03c75a1a;}
+
+/* 생일/데뷔/MBTI/팬닉 — 1행 균등 카드 */
+.meta-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+.meta-card{
+  background:#fff;
+  border:0.5px solid rgba(109,205,208,.35);
+  border-radius:16px;
+  padding:28px 12px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;text-align:center;
+  transition:all .3s ease;
+}
+.meta-card:hover{
+  border-color:rgba(109,205,208,.6);
+  box-shadow:0 3px 10px rgba(109,205,208,.1);
+}
+.meta-card .mc-key{font-size:.75rem;color:#8c8c8c;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;}
+.meta-card .mc-val{font-size:1.0625rem;font-weight:600;color:#3d3d3d;line-height:1.3;}
+
+/* RP / TMI — 2열 */
+.rp-tmi-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.rp-box{border-radius:12px;padding:16px 15px;font-size:.83rem;font-weight:500;line-height:1.5;min-height:80px;}
+.rp-box.rp {background:#f0e8ff;color:#6030b0;}
+.rp-box.tmi{background:#e8f0ff;color:#3050b8;}
+.rp-box .sub{font-size:.74rem;opacity:.72;display:block;margin-top:2px;}
+
+/* ══════════════════════════
+   ② 방송 정보 — 컨텐츠(2×2 좌) + 목표(우)
+══════════════════════════ */
+/* broadcast-wrap → .broadcast-outer로 이동 */
+
+/* 컨텐츠 2×2 내부 그리드 */
+.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.content-card{
+  background:var(--white);border-radius:14px;padding:18px 14px;
+  box-shadow:0 2px 14px var(--shadow);
+  transition:transform .2s,box-shadow .2s;
+  text-align:center;
+  display:flex;flex-direction:column;align-items:center;
+}
+.content-card:hover{transform:translateY(-2px);box-shadow:0 6px 22px var(--shadow);}
+.content-card .cc-icon{font-size:1.3rem;margin-bottom:5px;}
+.content-card .cc-label{font-size:.7rem;color:var(--text-muted);margin-bottom:3px;font-weight:600;letter-spacing:.03em;}
+.content-card .cc-value{font-size:.86rem;color:var(--text);font-weight:600;line-height:1.5;}
+
+/* 목표 카드 */
+.goal-card{
+  background:var(--white);border-radius:14px;padding:20px;
+  box-shadow:0 2px 14px var(--shadow);
+  height:100%;
+}
+.goal-list{display:flex;flex-direction:column;gap:9px;margin-top:6px;}
+.goal-row{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 14px;border-radius:10px;
+  background:var(--gray-100);min-height:44px;
+  border:1px solid var(--gray-200);
+}
+.goal-row .g-num{font-family:'A2z',sans-serif;font-size:.74rem;color:var(--primary);font-weight:700;min-width:18px;}
+.goal-row .g-text{font-size:.85rem;color:var(--text);}
+.goal-row .g-sub{font-size:.76rem;color:var(--text-muted);display:block;margin-top:1px;}
+.goal-row.done{opacity:.5;}
+.goal-row .done-n{color:var(--gray-400);}
+.goal-row .done-t{text-decoration:line-through;color:var(--text-muted);}
+
+/* ══════════════════════════
+   ③ 이번주 스케줄
+══════════════════════════ */
+.schedule-card{background:var(--white);border-radius:16px;padding:22px;box-shadow:0 3px 20px var(--shadow);margin-bottom:20px;}
+.week-grid{display:flex;gap:6px;margin-bottom:12px;}
+.day{flex:1;text-align:center;padding:9px 4px;border-radius:10px;font-size:.8rem;font-weight:600;background:var(--gray-100);color:var(--gray-600);border:1.5px solid transparent;transition:background .2s;}
+.day.on {background:var(--primary-pale);color:var(--primary-deep);border-color:var(--primary-light);}
+.day.off{background:#fff0f0;color:#e88;}
+.day.today{background:var(--primary);color:#fff;border-color:var(--primary-dark);}
+.day small{display:block;font-size:.67rem;font-weight:400;margin-top:2px;}
+.sched-note{background:var(--primary-pale);border-radius:9px;padding:10px 14px;font-size:.85rem;color:var(--primary-deep);display:flex;align-items:center;gap:8px;}
+.sched-note::before{content:'📡';}
+
+/* ══════════════════════════
+   ④ 시그풍(좌) + 후원API(우) 병렬
+══════════════════════════ */
+.bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.bottom-card{background:var(--white);border-radius:16px;padding:20px;box-shadow:0 3px 20px var(--shadow);}
+
+.sig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px;}
+.sig-item{aspect-ratio:1;border-radius:10px;background:linear-gradient(135deg,var(--primary-pale),var(--accent-soft));border:1.5px dashed var(--primary-light);display:flex;align-items:center;justify-content:center;color:var(--primary-light);font-size:1rem;overflow:hidden;transition:transform .18s;}
+.sig-item{cursor:pointer;}.sig-item:hover{transform:scale(1.05);}
+.sig-item img{width:100%;height:100%;object-fit:cover;}
+
+.api-list{display:flex;flex-direction:column;gap:5px;margin-top:8px;}
+.api-row{display:grid;grid-template-columns:110px 1fr;align-items:center;gap:0;padding:8px 12px;border-radius:9px;background:var(--gray-100);border:1px solid var(--gray-200);}
+.api-row .api-cnt{font-family:'A2z',sans-serif;font-size:.76rem;color:var(--primary-deep);font-weight:700;text-align:right;padding-right:12px;border-right:1.5px solid var(--gray-200);}
+.api-row .api-label{font-size:.84rem;color:var(--text);padding-left:12px;}
+
+
+/* ── 브로드캐스트 섹션 ── */
+.broadcast-outer{margin:36px 0 20px;}
+.broadcast-wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+
+.bc-col{}
+.bc-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.12em;color:var(--primary-deep);text-transform:uppercase;margin-bottom:4px;}
+.bc-title{font-family:'A2z',sans-serif;font-size:1.3rem;color:var(--text);margin-bottom:18px;font-weight:600;}
+
+/* goal-card — 큐피 스타일: 리스트만, 배경 유지 */
+
+/* FOOTER */
+footer{text-align:center;padding:26px 20px;color:var(--gray-400);font-size:.78rem;border-top:1px solid var(--gray-200);}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .profile-hero{flex-direction:column;gap:20px;padding:24px 0;}
+  .avatar-col{margin:0 auto;}.avatar-wrap{width:200px;height:200px;}
+  .profile-right{width:100%;}
+  .name-platform-row{flex-direction:column;align-items:flex-start;width:100%;}
+  .meta-grid{grid-template-columns:repeat(2,1fr);width:100%;}
+  .rp-box{width:100%;}
+  .rp-tmi-row{grid-template-columns:1fr;width:100%;}
+  .broadcast-wrap{grid-template-columns:1fr;}
+  .content-grid{grid-template-columns:1fr 1fr;}
+  .bottom-row{grid-template-columns:1fr;}
+  nav a{padding:13px 16px;font-size:.85rem;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="active">프로필</a>
+  <a href="./schedule/">일정</a>
+  <a href="./songbook/">노래책</a>
+  <a href="./upbo/">업보</a>
+</nav>
+
+<main>
+<!-- ① 히어로 -->
+<div class="fade-up">
+  <div class="profile-hero">
+
+    <!-- 좌: 프사 30% -->
+    <div class="avatar-col"><div class="avatar-glow"></div><div class="avatar-wrap"><img src="./assets/profile.gif" alt="유남라"></div></div>
+
+    <!-- 우: 나머지 꽉 채우기 -->
+    <div class="profile-right">
+
+      <!-- 이름(좌) + 플랫폼 버튼(우) -->
+      <div class="name-platform-row">
+        <h1>유남라</h1>
+        <div class="platform-btns">
+          <a class="pchip soop" href="https://www.sooplive.com/station/younamra" target="_blank">🎮 SOOP</a>
+          <a class="pchip yt"   href="https://www.youtube.com/@younamra" target="_blank">▶ 유튜브</a>
+          <a class="pchip cafe" href="https://cafe.naver.com/younamra" target="_blank">☕ 팬카페</a>
+        </div>
+      </div>
+
+      <!-- 생일/데뷔/MBTI/팬닉 1행 균등 카드 -->
+      <div class="meta-grid">
+        <div class="meta-card">
+          <div class="mc-key">생일</div>
+          <div class="mc-val">12월 14일</div>
+        </div>
+        <div class="meta-card">
+          <div class="mc-key">데뷔</div>
+          <div class="mc-val">2025.04.01</div>
+        </div>
+        <div class="meta-card">
+          <div class="mc-key">주요 방송</div>
+          <div class="mc-val">소통 · 종합게임</div>
+        </div>
+        <div class="meta-card">
+          <div class="mc-key">팬닉</div>
+          <div class="mc-val">유랑이 · `^´</div>
+        </div>
+      </div>
+
+      <!-- RP / TMI -->
+      <div class="rp-tmi-row">
+        <div class="rp-box rp">
+          💀 RP
+          <span class="sub">실직한 저승사자 (구 저승사자 → 현 인간)</span>
+        </div>
+        <div class="rp-box tmi">
+          🇨🇳 · TMI
+          <span class="sub">중국 유학 출신 · 방송에서 중국노래 부르기도</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<!-- ③ 이번주 스케줄 -->
+<div class="fade-up" style="margin-bottom:20px;">
+  <div class="sec-head"><span class="badge">📅</span>이번주 스케줄</div>
+  <div class="schedule-card">
+    <div class="week-grid" id="weekGrid">
+      <div class="day" data-day="1">월</div>
+      <div class="day on"  data-day="2">화</div>
+      <div class="day on"  data-day="3">수</div>
+      <div class="day on"  data-day="4">목</div>
+      <div class="day on"  data-day="5">금</div>
+      <div class="day on"  data-day="6">토</div>
+      <div class="day on"  data-day="0">일</div>
+    </div>
+    <div class="sched-note" id="schedNote">매일 오후 5시 방송 · 월요일 정기휴방</div>
+  </div>
+</div>
+
+<!-- ④ 방송목표(좌) + 후원 API(우) -->
+<div class="fade-up bottom-row">
+  <div class="bottom-card">
+    <div class="card-label">🎯 방송 목표</div>
+    <div class="goal-list" id="goalListEl">
+      <div class="goal-row"><span class="g-num">01</span><span class="g-text">⭐ 건강해지기 ⭐ <span class="g-sub">목 상태 · 운동 · 생활패턴</span></span></div>
+      <div class="goal-row"><span class="g-num">04</span><span class="g-text">유튜브 가동 &amp; 구독자 500명</span></div>
+      <div class="goal-row"><span class="g-num">06</span><span class="g-text">뉴남라 공개</span></div>
+      <div class="goal-row"><span class="g-num">08</span><span class="g-text">커버곡 내기</span></div>
+      <div class="goal-row"><span class="g-num">09</span><span class="g-text">평청자 30명 달성</span></div>
+      <div class="goal-row done"><span class="g-num done-n">02</span><span class="g-text done-t">애청자 1000명</span></div>
+      <div class="goal-row done"><span class="g-num done-n">03</span><span class="g-text done-t">베스트 스트리머</span></div>
+      <div class="goal-row done"><span class="g-num done-n">05</span><span class="g-text done-t">마크 서버 or 컨텐츠 열기</span></div>
+      <div class="goal-row done"><span class="g-num done-n">07</span><span class="g-text done-t">굿즈 내기</span></div>
+    </div>
+  </div>
+  <div class="bottom-card">
+    <div class="card-label">💙 후원 API</div>
+    <div class="api-list" id="apiListEl">
+      <div class="api-row"><span class="api-cnt">1개</span><span class="api-label">별풍선 촵</span></div>
+      <div class="api-row"><span class="api-cnt">10개</span><span class="api-label">뿅망치</span></div>
+      <div class="api-row"><span class="api-cnt">18개</span><span class="api-label">놀래키는 소리</span></div>
+      <div class="api-row"><span class="api-cnt">30개</span><span class="api-label">아봉권 (마이크 OFF)</span></div>
+      <div class="api-row"><span class="api-cnt">33개</span><span class="api-label">하트 또르르</span></div>
+      <div class="api-row"><span class="api-cnt">50개</span><span class="api-label">유랑이가 망치로 남라 때리기</span></div>
+      <div class="api-row"><span class="api-cnt">100개</span><span class="api-label">코인와다다</span></div>
+      <div class="api-row"><span class="api-cnt">330개</span><span class="api-label">하트 와르르</span></div>
+      <div class="api-row"><span class="api-cnt">434 / 700개</span><span class="api-label">유랑이 볼뽀뽀</span></div>
+      <div class="api-row"><span class="api-cnt">500개</span><span class="api-label">버블건</span></div>
+      <div class="api-row"><span class="api-cnt">1000 ~ 2999개</span><span class="api-label">유랑이머니건</span></div>
+      <div class="api-row"><span class="api-cnt">1434개</span><span class="api-label">천사날개</span></div>
+      <div class="api-row"><span class="api-cnt">3000개+</span><span class="api-label">모시모시 댄스댄스</span></div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>유남라 · 유랑이 💚</footer>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);} });
+}, {threshold:0.06});
+document.querySelectorAll('.fade-up').forEach(el => {
+  io.observe(el);
+  if(el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
+});
+
+// 오늘 요일 하이라이트는 Supabase 로직 안에서 처리
+
+// 이번주 스케줄 Supabase 연동
+(async () => {
+  const SUPABASE_URL  = 'https://xigbjaayjqshjulsovqn.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpZ2JqYWF5anFzaGp1bHNvdnFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MjQwNzgsImV4cCI6MjA5NTQwMDA3OH0.B7akZMoAdrjF7CiLMNHvTOmO1dapHTlkEL8fbho30Us';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  // 이번주 월~일 날짜 계산
+  const now = new Date();
+  const dow = now.getDay(); // 0=일
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - (dow === 0 ? 6 : dow - 1));
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+
+  const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+
+  try {
+    const { data } = await sb.from('schedules')
+      .select('*')
+      .gte('date', fmt(monday))
+      .lte('date', fmt(sunday))
+      .order('date');
+
+    // schedMap: date → schedule
+    const schedMap = {};
+    (data||[]).forEach(s => { schedMap[s.date] = s; });
+
+    // 요일 칩 업데이트
+    const grid = document.getElementById('weekGrid');
+    const chips = grid.querySelectorAll('.day');
+
+    chips.forEach((chip, i) => {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      const dateStr = fmt(d);
+      const sc = schedMap[dateStr];
+      const dayLabel = ['월','화','수','목','금','토','일'][i];
+
+      const statusLabel = {normal:'방송', holiday:'휴방', special:'특방', anniversary:'기념일', collab:'합방', event:'이벤트'};
+
+      if (sc) {
+        if (sc.status === 'holiday') {
+          chip.className = 'day off has-sched';
+          chip.style = '';
+          chip.innerHTML = `<div class="day-name">${dayLabel}</div><div class="day-type">휴방</div>${sc.note?`<div class="day-time">${sc.note.slice(0,4)}</div>`:''}`;
+        } else if (sc.status === 'anniversary') {
+          chip.className = 'day on has-sched';
+          chip.style.cssText = 'background:#fff5e0;color:#a08000;border-color:#fcd34d;';
+          chip.innerHTML = `<div class="day-name">${dayLabel}</div><div class="day-type">기념일</div>`;
+        } else if (sc.status === 'special') {
+          chip.className = 'day on has-sched';
+          chip.style.cssText = 'background:#f0e8ff;color:#7040c0;border-color:#c9b3ff;';
+          chip.innerHTML = `<div class="day-name">${dayLabel}</div><div class="day-type">특방</div>${sc.slot1_time?`<div class="day-time">${sc.slot1_time}</div>`:''}`;
+        } else {
+          chip.className = 'day on has-sched';
+          chip.style = '';
+          chip.innerHTML = `<div class="day-name">${dayLabel}</div><div class="day-type">방송</div>${sc.slot1_time?`<div class="day-time">${sc.slot1_time}</div>`:''}`;
+        }
+        chip.onclick = () => openSchedPopup(sc);
+      } else {
+        if (i === 0) {
+          chip.className = 'day off';
+          chip.style = '';
+          chip.innerHTML = `<div class="day-name">${dayLabel}</div><div class="day-type">휴방</div>`;
+        } else {
+          chip.className = 'day on';
+          chip.style = '';
+          chip.innerHTML = `<div class="day-name">${dayLabel}</div>`;
+        }
+      }
+
+      // 오늘 표시
+      const todayDow = new Date().getDay();
+      if (parseInt(chip.dataset.day) === todayDow) {
+        chip.classList.add('today');
+        chip.style.background = '';
+        chip.style.color = '';
+        chip.style.borderColor = '';
+      }
+    });
+
+    // 오늘 스케줄 note 업데이트
+    const todayStr = fmt(now);
+    const todaySc = schedMap[todayStr];
+    const note = document.getElementById('schedNote');
+    if (todaySc) {
+      if (todaySc.status === 'holiday') {
+        note.textContent = '오늘은 휴방이에요 🌙';
+      } else if (todaySc.slot1_title) {
+        note.textContent = (todaySc.slot1_time ? todaySc.slot1_time + ' ' : '') + todaySc.slot1_title
+          + (todaySc.slot2_title ? ' · ' + (todaySc.slot2_time ? todaySc.slot2_time + ' ' : '') + todaySc.slot2_title : '');
+      }
+    }
+  } catch(e) {
+    console.error('스케줄 연동 실패:', e);
+  }
+})();
+
+  // 방송목표 + 후원API DB 로드
+  (async () => {
+    try {
+      const SUPABASE_URL2 = 'https://xigbjaayjqshjulsovqn.supabase.co';
+      const SUPABASE_ANON2 = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpZ2JqYWF5anFzaGp1bHNvdnFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MjQwNzgsImV4cCI6MjA5NTQwMDA3OH0.B7akZMoAdrjF7CiLMNHvTOmO1dapHTlkEL8fbho30Us';
+      const res = await fetch(`${SUPABASE_URL2}/rest/v1/upbo_settings?select=*`, {
+        headers:{apikey:SUPABASE_ANON2,Authorization:`Bearer ${SUPABASE_ANON2}`}
+      });
+      const data = await res.json();
+      const map = Object.fromEntries((data||[]).map(d=>[d.key,d.value]));
+
+      // 목표
+      const gel = document.getElementById('goalListEl');
+      if(gel) {
+        let goals=[];
+        try{goals=JSON.parse(map.goals||'[]');}catch(e){}
+        if(goals.length) {
+          gel.innerHTML = goals.map(g=>`
+            <div class="goal-row${g.done?' done':''}">
+              <span class="g-num${g.done?' done-n':''}">${String(g.num||'').padStart(2,'0')}</span>
+              <span class="${g.done?'g-text done-t':'g-text'}">${g.text}</span>
+            </div>`).join('');
+        }
+      }
+
+      // 후원 API
+      const ael = document.getElementById('apiListEl');
+      if(ael) {
+        let apis=[];
+        try{apis=JSON.parse(map.donation_api||'[]');}catch(e){}
+        if(apis.length) {
+          ael.innerHTML = apis.map(a=>`
+            <div class="api-row"><span class="api-cnt">${a.cnt}</span><span class="api-label">${a.label}</span></div>`).join('');
+        }
+      }
+    } catch(e) { console.error('설정 로드 실패:', e); }
+  })();
+
+</script>
+
+
+<!-- 스케줄 팝업 -->
+<div id="schedPopup" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.3);backdrop-filter:blur(6px);align-items:center;justify-content:center;">
+  <div onclick="event.stopPropagation()" style="background:#fff;border-radius:20px;padding:24px;max-width:340px;width:90%;box-shadow:0 16px 48px rgba(109,205,208,.2);border:1.5px solid var(--primary-pale);animation:popIn .2s ease;">
+    <div id="schedPopupContent"></div>
+    <button onclick="document.getElementById('schedPopup').style.display='none'" style="width:100%;margin-top:16px;padding:10px;border-radius:12px;background:var(--primary-pale);color:var(--primary-deep);border:none;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;">닫기</button>
+  </div>
+</div>
+<style>
+@keyframes popIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+</style>
+
+<!-- 라이트박스 -->
+<div id="lightbox" onclick="closeLightbox()" style="
+  display:none;position:fixed;inset:0;z-index:999;
+  background:rgba(0,0,0,.75);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;
+">
+  <div onclick="event.stopPropagation()" style="
+    background:#fff;border-radius:16px;
+    padding:16px;box-shadow:0 12px 48px rgba(0,0,0,.4);
+    max-width:min(90vw,600px);max-height:90vh;
+    display:flex;flex-direction:column;align-items:center;gap:12px;
+    animation:lbIn .2s ease;
+  ">
+    <img id="lbImg" src="" style="max-width:100%;max-height:75vh;border-radius:8px;display:block;">
+    <button onclick="closeLightbox()" style="
+      padding:7px 24px;border-radius:20px;border:1.5px solid var(--primary);
+      background:none;color:var(--primary-deep);font-family:'A2z',sans-serif;
+      font-size:.85rem;cursor:pointer;
+    ">닫기</button>
+  </div>
+</div>
+<style>
+@keyframes lbIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+</style>
+<script>
+
+function openSchedPopup(sc) {
+  const statusLabel = {normal:'방송', special:'특방', anniversary:'기념일', collab:'합방', event:'이벤트'};
+  const statusColor = {normal:'var(--primary-deep)', special:'#7040c0', anniversary:'#a08000', collab:'#22c55e', event:'#f59e0b'};
+  const lbl = statusLabel[sc.status] || sc.status;
+  const col = statusColor[sc.status] || 'var(--primary-deep)';
+
+  let html = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+    <span style="padding:4px 12px;border-radius:20px;font-size:.78rem;font-weight:700;background:${col}22;color:${col};">${lbl}</span>
+    <span style="font-size:.82rem;color:var(--text-muted);">${sc.date}</span>
+  </div>`;
+
+  if (sc.slot1_title) {
+    html += `<div style="padding:12px 14px;background:var(--primary-pale);border-radius:12px;margin-bottom:8px;">
+      <div style="font-size:.72rem;color:var(--primary-deep);font-weight:600;margin-bottom:3px;">${sc.slot1_time||''}</div>
+      <div style="font-size:.92rem;font-weight:700;color:var(--text);">${sc.slot1_title}</div>
+    </div>`;
+  }
+  if (sc.slot2_title) {
+    html += `<div style="padding:12px 14px;background:var(--primary-pale);border-radius:12px;margin-bottom:8px;">
+      <div style="font-size:.72rem;color:var(--primary-deep);font-weight:600;margin-bottom:3px;">${sc.slot2_time||''}</div>
+      <div style="font-size:.92rem;font-weight:700;color:var(--text);">${sc.slot2_title}</div>
+    </div>`;
+  }
+  if (sc.note && sc.status !== 'normal') {
+    html += `<div style="font-size:.82rem;color:var(--text-muted);margin-top:8px;">${sc.note}</div>`;
+  }
+  if (!sc.slot1_title && !sc.slot2_title) {
+    html += `<div style="font-size:.88rem;color:var(--text-muted);text-align:center;padding:12px 0;">${lbl} 예정</div>`;
+  }
+
+  document.getElementById('schedPopupContent').innerHTML = html;
+  const popup = document.getElementById('schedPopup');
+  popup.style.display = 'flex';
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.getElementById('schedPopup').style.display='none'; });
+
+function openLightbox(src){
+  document.getElementById('lbImg').src=src;
+  const lb=document.getElementById('lightbox');
+  lb.style.display='flex';
+}
+function closeLightbox(){
+  document.getElementById('lightbox').style.display='none';
+  document.getElementById('lbImg').src='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
+</script>
+</body>
+</html>
