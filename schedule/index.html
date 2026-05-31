@@ -2,89 +2,104 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>유남라</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <style>
 @font-face{font-family:'A2z';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-4Regular.woff2')format('woff2');font-weight:400;font-display:swap;}
 @font-face{font-family:'A2z';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-6SemiBold.woff2')format('woff2');font-weight:600;font-display:swap;}
-@font-face{font-family:'A2z';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/에이투지체-7Bold.woff2')format('woff2');font-weight:700;font-display:swap;}
-</style>
-<style>
-:root {
-  --primary:#6dcdd0;--primary-light:#9de0e2;--primary-pale:#e8f9f9;
-  --primary-dark:#4ab8bc;--primary-deep:#2a8a8d;
-  --white:#fff;--gray-100:#f7f7f7;--gray-200:#eee;--gray-400:#bbb;--gray-600:#888;
-  --text:#1c1c2e;--text-muted:#6b7280;--shadow:rgba(109,205,208,.15);
-  --status-normal: var(--primary-pale);
-  --status-holiday: #fff0f0;
-  --status-special: #f0e8ff;
-  --status-anniversary: #fff5e0;
+:root{
+  --primary:#6dcdd0;--primary-dk:#4ab8bc;--primary-lt:#e8f9f9;--primary-pale:#cef0f1;
+  --text:#1c1c2e;--text-sub:#6b7280;--text-mut:#aaa;
+  --surface:#fff;--bg:#f0fbfb;--border:#cef0f1;--shadow:rgba(109,205,208,.12);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'A2z','Noto Sans KR',sans-serif;background:#f0fbfb;color:var(--text);}
-nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1.5px solid var(--primary-pale);display:flex;justify-content:center;}
-nav a{font-family:'A2z',sans-serif;font-size:.95rem;color:var(--text-muted);text-decoration:none;padding:16px 36px;border-bottom:2.5px solid transparent;transition:color .2s,border-color .2s;}
-nav a:hover,nav a.active{color:var(--primary-deep);border-bottom-color:var(--primary);}
-main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
-.page-head{font-family:'A2z',sans-serif;font-size:1.5rem;color:var(--primary-deep);margin-bottom:24px;}
+body{font-family:'A2z','Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
-/* CAL HEADER */
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1.5px solid var(--border);display:flex;justify-content:center;}
+nav a{font-family:'A2z',sans-serif;font-size:.95rem;color:var(--text-sub);text-decoration:none;padding:16px 36px;border-bottom:2.5px solid transparent;transition:color .2s,border-color .2s;}
+nav a:hover,nav a.active{color:var(--primary-dk);border-bottom-color:var(--primary);}
+
+main{max-width:960px;margin:0 auto;padding:32px 20px 80px;}
+.page-title{font-family:'A2z',sans-serif;font-size:1.3rem;color:var(--text);margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+
+/* ── 캘린더 ── */
+.cal-wrap{background:var(--surface);border-radius:18px;padding:20px;box-shadow:0 3px 20px var(--shadow);margin-bottom:20px;}
 .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-.cal-title{font-family:'A2z',sans-serif;font-size:1.2rem;color:var(--text);}
-.cal-btn{width:36px;height:36px;border:1.5px solid var(--gray-200);border-radius:10px;background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:all .2s;}
-.cal-btn:hover{background:var(--primary-pale);border-color:var(--primary);}
+.cal-title{font-family:'A2z',sans-serif;font-size:1.1rem;color:var(--text);}
+.cal-btn{width:34px;height:34px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;color:var(--text-sub);transition:all .2s;}
+.cal-btn:hover{background:var(--primary-lt);border-color:var(--primary);color:var(--primary-dk);}
 
-/* CALENDAR GRID */
-.cal-wrap{background:var(--white);border-radius:16px;padding:20px;box-shadow:0 3px 20px var(--shadow);margin-bottom:20px;}
-.cal-days-header{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:8px;}
-.cal-days-header span{text-align:center;font-size:.78rem;font-weight:600;color:var(--gray-600);padding:6px 0;}
-.cal-days-header span:first-child{color:#e88;}
-.cal-days-header span:last-child{color:#6dcdd0;}
+.cal-header{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:6px;}
+.cal-header span{text-align:center;font-size:.75rem;font-weight:600;color:var(--text-sub);padding:6px 0;}
+.cal-header span:first-child{color:#e88;}
+.cal-header span:last-child{color:var(--primary-dk);}
+
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
-.cal-cell{min-height:72px;border-radius:10px;padding:6px;cursor:pointer;transition:background .15s;border:1.5px solid transparent;}
-.cal-cell:hover{background:var(--primary-pale);}
-.cal-cell.empty{cursor:default;background:none;}
-.cal-cell.today .date-num{background:var(--primary);color:var(--white);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.78rem;}
-.cal-cell.selected{border-color:var(--primary);background:var(--primary-pale);}
-.cal-cell.status-holiday{background:#fff5f5;}
-.cal-cell.status-special{background:#f8f0ff;}
-.cal-cell.status-anniversary{background:#fffbe0;}
-.date-num{font-size:.78rem;font-weight:600;color:var(--text-muted);margin-bottom:4px;}
-.cal-cell.sun .date-num{color:#e88;}
-.cal-cell.sat .date-num{color:var(--primary-dark);}
-.slot-preview{font-size:.72rem;color:var(--primary-deep);background:var(--primary-pale);border-radius:4px;padding:2px 5px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.slot-preview.holiday{background:#ffe0e0;color:#c44;}
-.slot-preview.special{background:#ede0ff;color:#7040c0;}
-.slot-preview.anniversary{background:#fff0c0;color:#a08000;}
 
-/* DETAIL */
-.detail-card{background:var(--white);border-radius:16px;padding:24px;box-shadow:0 3px 20px var(--shadow);}
-.detail-date{font-family:'A2z',sans-serif;font-size:1.1rem;color:var(--primary-deep);margin-bottom:16px;}
-.slot-row{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--gray-100);}
-.slot-row:last-child{border-bottom:none;}
-.slot-time{font-size:.85rem;font-weight:700;color:var(--primary);min-width:50px;padding-top:2px;}
-.slot-title{font-size:.92rem;color:var(--text);font-weight:500;}
-.slot-note{font-size:.82rem;color:var(--text-muted);margin-top:3px;}
-.no-sched{color:var(--gray-400);font-size:.9rem;padding:12px 0;}
+/* 냔냐 스타일 셀 */
+.cal-cell{
+  min-height:82px;background:var(--surface);
+  border-radius:10px;border:.5px solid rgba(109,205,208,.2);
+  padding:6px 7px;cursor:default;transition:all .2s;
+  overflow:hidden;
+}
+.cal-cell:hover:not(.empty){border-color:var(--primary);box-shadow:0 2px 12px var(--shadow);}
+.cal-cell.empty{background:transparent;border-color:transparent;}
+.cal-cell.empty:hover{box-shadow:none;}
+.cal-cell.today{border-color:var(--primary-dk);box-shadow:0 0 0 1.5px var(--primary-dk);}
+.cal-cell.past{opacity:.45;}
 
+.cal-day-num{font-size:.8rem;font-weight:600;color:var(--text-sub);margin-bottom:4px;line-height:1;}
+.cal-cell.sun .cal-day-num{color:#e88;}
+.cal-cell.sat .cal-day-num{color:var(--primary-dk);}
+.cal-cell.today .cal-day-num{
+  width:20px;height:20px;background:var(--primary-dk);color:#fff;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:.72rem;margin-bottom:4px;
+}
 
-.upcoming-section{margin-top:20px;}
-.upcoming-title{font-family:'A2z',sans-serif;font-size:1rem;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+/* 냔냐 이벤트 칩 */
+.cal-event{
+  font-size:.65rem;padding:2px 5px;border-radius:5px;
+  margin-bottom:2px;color:#fff;font-weight:600;
+  word-break:keep-all;overflow-wrap:break-word;
+  line-height:1.3;cursor:pointer;transition:opacity .2s;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.cal-event:hover{opacity:.82;}
+
+/* ── 이벤트 모달 ── */
+.modal-backdrop{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.3);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-backdrop.open{display:flex;}
+.modal-box{background:var(--surface);border-radius:20px;padding:26px;max-width:380px;width:100%;box-shadow:0 16px 48px rgba(109,205,208,.2);border:1.5px solid var(--border);animation:mbIn .2s ease;}
+@keyframes mbIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.modal-date{font-size:.8rem;color:var(--text-sub);margin-bottom:12px;}
+.modal-badge{display:inline-flex;align-items:center;padding:4px 12px;border-radius:20px;font-size:.78rem;font-weight:700;color:#fff;margin-bottom:14px;}
+.modal-slot{padding:12px 14px;background:var(--bg);border-radius:12px;margin-bottom:8px;}
+.modal-slot-time{font-size:.75rem;font-weight:700;color:var(--primary-dk);margin-bottom:3px;}
+.modal-slot-title{font-size:.92rem;font-weight:600;color:var(--text);}
+.modal-note{font-size:.83rem;color:var(--text-sub);margin-top:8px;padding:10px 12px;background:var(--bg);border-radius:10px;}
+.modal-close{width:100%;padding:10px;border-radius:12px;background:var(--primary-lt);color:var(--primary-dk);border:none;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer;margin-top:16px;transition:background .2s;}
+.modal-close:hover{background:var(--primary-pale);}
+
+/* ── 다가오는 일정 ── */
+.upcoming-wrap{background:var(--surface);border-radius:18px;padding:20px;box-shadow:0 3px 20px var(--shadow);}
+.section-title{font-family:'A2z',sans-serif;font-size:1rem;color:var(--text);margin-bottom:14px;}
 .upcoming-list{display:flex;flex-direction:column;gap:8px;}
-.upcoming-item{background:var(--white);border-radius:12px;padding:14px 16px;box-shadow:0 2px 12px var(--shadow);display:flex;align-items:center;gap:14px;border-left:4px solid var(--primary);}
+.upcoming-item{display:flex;align-items:center;gap:14px;padding:12px 14px;background:var(--bg);border-radius:12px;border-left:3.5px solid var(--primary);cursor:pointer;transition:all .2s;}
+.upcoming-item:hover{transform:translateX(3px);box-shadow:0 2px 10px var(--shadow);}
 .upcoming-item.holiday{border-left-color:#f0a8c8;}
-.upcoming-item.special{border-left-color:#c9b3ff;}
-.upcoming-date{font-size:.8rem;font-weight:700;color:var(--text-muted);min-width:70px;}
-.upcoming-content{flex:1;}
-.upcoming-content .u-title{font-size:.9rem;font-weight:600;color:var(--text);}
-.upcoming-content .u-time{font-size:.78rem;color:var(--text-muted);margin-top:2px;}
-.upcoming-badge{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--primary-pale);color:var(--primary-deep);}
+.upcoming-item.special{border-left-color:#a78bfa;}
+.u-date{font-size:.78rem;font-weight:700;color:var(--text-sub);min-width:64px;}
+.u-body{flex:1;}
+.u-title{font-size:.9rem;font-weight:600;color:var(--text);}
+.u-time{font-size:.75rem;color:var(--text-sub);margin-top:2px;}
+.u-badge{font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:20px;color:#fff;flex-shrink:0;}
+.empty-state{text-align:center;padding:28px;color:var(--text-mut);font-size:.88rem;}
 
-footer{text-align:center;padding:28px 20px;color:var(--gray-400);font-size:.8rem;border-top:1px solid var(--gray-200);}
-@media(max-width:768px){nav a{padding:14px 18px;font-size:.85rem;}.cal-cell{min-height:52px;padding:4px;}.slot-preview{display:none;}}
+footer{text-align:center;padding:26px 20px;color:var(--text-mut);font-size:.78rem;border-top:1px solid var(--border);margin-top:20px;}
+@media(max-width:600px){.cal-cell{min-height:58px;padding:4px;}.cal-event{display:none;}.cal-cell.has-ev::after{content:'•';color:var(--primary-dk);font-size:1rem;display:block;text-align:center;}nav a{padding:13px 16px;font-size:.85rem;}}
 </style>
 </head>
 <body>
@@ -95,7 +110,7 @@ footer{text-align:center;padding:28px 20px;color:var(--gray-400);font-size:.8rem
   <a href="../upbo/">업보</a>
 </nav>
 <main>
-  <div class="page-head">📅 방송 일정</div>
+  <div class="page-title">📅 방송 일정</div>
 
   <div class="cal-wrap">
     <div class="cal-nav">
@@ -103,29 +118,58 @@ footer{text-align:center;padding:28px 20px;color:var(--gray-400);font-size:.8rem
       <div class="cal-title" id="calTitle"></div>
       <button class="cal-btn" id="nextBtn">›</button>
     </div>
-    <div class="cal-days-header">
+    <div class="cal-header">
       <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
     </div>
     <div class="cal-grid" id="calGrid"></div>
   </div>
 
-  <div class="detail-card" id="detailCard" style="display:none;"></div>
-  <div class="upcoming-section">
-    <div class="upcoming-title">📋 다가오는 일정</div>
-    <div class="upcoming-list" id="upcomingList"><div style="color:var(--gray-400);font-size:.85rem;padding:8px;">불러오는 중...</div></div>
+  <div class="upcoming-wrap">
+    <div class="section-title">📋 다가오는 일정</div>
+    <div class="upcoming-list" id="upcomingList"><div class="empty-state">불러오는 중...</div></div>
   </div>
 </main>
+
+<!-- 이벤트 모달 -->
+<div class="modal-backdrop" id="eventModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-date" id="modalDate"></div>
+    <div class="modal-badge" id="modalBadge"></div>
+    <div id="modalSlots"></div>
+    <div class="modal-note" id="modalNote" style="display:none;"></div>
+    <button class="modal-close" onclick="closeModal()">닫기</button>
+  </div>
+</div>
+
 <footer>유남라 · 유랑이 💚</footer>
 
 <script>
 const SUPABASE_URL  = 'https://xigbjaayjqshjulsovqn.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpZ2JqYWF5anFzaGp1bHNvdnFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MjQwNzgsImV4cCI6MjA5NTQwMDA3OH0.B7akZMoAdrjF7CiLMNHvTOmO1dapHTlkEL8fbho30Us';
 
-let cur = new Date(); cur.setDate(1);
-let schedMap = {};
-let selectedDate = null;
+// 냔냐 스타일 카테고리 색상
+const TYPE_COLORS = {
+  normal:      '#6dcdd0',
+  holiday:     '#f0a8c8',
+  special:     '#a78bfa',
+  anniversary: '#fbbf24',
+  collab:      '#34d399',
+  contest:     '#f97316',
+  mc_server:   '#60a5fa',
+  event:       '#a78bfa',
+  other:       '#94a3b8',
+};
+const TYPE_LABELS = {
+  normal:'방송', holiday:'휴방', special:'특방',
+  anniversary:'기념일', collab:'합방', contest:'대회',
+  mc_server:'마크서버', event:'이벤트', other:'기타',
+};
+const DOW = ['일','월','화','수','목','금','토'];
 
-const STATUS_LABEL = { normal:'방송', holiday:'휴방', special:'특방', anniversary:'기념일' };
+let cur = new Date(); cur.setDate(1);
+let schedMap = {}, allEvents = [];
+
+const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 
 async function loadMonth(y, m) {
   const from = `${y}-${String(m+1).padStart(2,'0')}-01`;
@@ -135,105 +179,129 @@ async function loadMonth(y, m) {
     headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` }
   });
   const data = await res.json();
-  schedMap = Object.fromEntries(data.map(s => [s.date, s]));
+  schedMap = {};
+  (Array.isArray(data)?data:[]).forEach(s => { schedMap[s.date] = s; });
   renderCal(y, m);
 }
 
 function renderCal(y, m) {
-  const title = `${y}년 ${m+1}월`;
-  document.getElementById('calTitle').textContent = title;
+  document.getElementById('calTitle').textContent = `${y}년 ${m+1}월`;
   const first = new Date(y, m, 1).getDay();
   const last  = new Date(y, m+1, 0).getDate();
   const today = new Date();
   const grid  = document.getElementById('calGrid');
   let html = '';
+
   for (let i=0; i<first; i++) html += `<div class="cal-cell empty"></div>`;
+
   for (let d=1; d<=last; d++) {
-    const dd = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const sc = schedMap[dd];
-    const dow = new Date(y,m,d).getDay();
+    const dd  = fmt(new Date(y, m, d));
+    const sc  = schedMap[dd];
+    const dow = new Date(y, m, d).getDay();
     const isToday = today.getFullYear()===y && today.getMonth()===m && today.getDate()===d;
-    const isSel   = selectedDate===dd;
+    const isPast  = new Date(y, m, d) < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
     let cls = 'cal-cell';
     if (dow===0) cls+=' sun'; if (dow===6) cls+=' sat';
-    if (isToday) cls+=' today'; if (isSel) cls+=' selected';
-    if (sc) cls+=` status-${sc.status}`;
-    let slots = '';
+    if (isToday) cls+=' today'; if (isPast) cls+=' past';
+    if (sc) cls+=' has-ev';
+
+    const dayNum = isToday
+      ? `<div class="cal-day-num">${d}</div>`
+      : `<div class="cal-day-num">${d}</div>`;
+
+    let events = '';
     if (sc) {
-      if (sc.status==='holiday') slots += `<div class="slot-preview holiday">🛌 휴방</div>`;
-      else if (sc.status==='anniversary') slots += `<div class="slot-preview anniversary">🎉 ${sc.note||'기념일'}</div>`;
-      else {
-        if (sc.slot1_title) slots += `<div class="slot-preview">${sc.slot1_time||''} ${sc.slot1_title}</div>`;
-        if (sc.slot2_title) slots += `<div class="slot-preview">${sc.slot2_time||''} ${sc.slot2_title}</div>`;
+      const color = TYPE_COLORS[sc.status] || TYPE_COLORS.normal;
+      const label = TYPE_LABELS[sc.status] || '방송';
+      if (sc.status === 'holiday') {
+        events += `<div class="cal-event" style="background:${color}" onclick="showEvent('${dd}')">휴방</div>`;
+      } else {
+        if (sc.slot1_title) events += `<div class="cal-event" style="background:${color}" onclick="showEvent('${dd}')">${sc.slot1_time||''} ${sc.slot1_title}</div>`;
+        if (sc.slot2_title) events += `<div class="cal-event" style="background:${TYPE_COLORS.collab}" onclick="showEvent('${dd}')">${sc.slot2_time||''} ${sc.slot2_title}</div>`;
+        if (!sc.slot1_title) events += `<div class="cal-event" style="background:${color}" onclick="showEvent('${dd}')">${label}</div>`;
       }
     }
-    html += `<div class="${cls}" data-date="${dd}" onclick="selectDate('${dd}')"><div class="date-num">${isToday?`<span style="background:var(--primary);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;">${d}</span>`:d}</div>${slots}</div>`;
+
+    html += `<div class="${cls}">${dayNum}${events}</div>`;
   }
   grid.innerHTML = html;
 }
 
-function selectDate(dd) {
-  selectedDate = dd;
-  document.querySelectorAll('.cal-cell').forEach(c => c.classList.toggle('selected', c.dataset.date===dd));
+function showEvent(dd) {
   const sc = schedMap[dd];
-  const card = document.getElementById('detailCard');
-  const [y,m,d] = dd.split('-');
-  const dows = ['일','월','화','수','목','금','토'];
-  const dow  = dows[new Date(Number(y),Number(m)-1,Number(d)).getDay()];
-  let inner = `<div class="detail-date">${y}년 ${m}월 ${d}일 (${dow})</div>`;
-  if (!sc) {
-    inner += `<div class="no-sched">등록된 일정이 없어요</div>`;
-  } else if (sc.status==='holiday') {
-    inner += `<div class="slot-row"><div class="slot-time">🛌</div><div><div class="slot-title">휴방</div>${sc.note?`<div class="slot-note">${sc.note}</div>`:''}</div></div>`;
-  } else if (sc.status==='anniversary') {
-    inner += `<div class="slot-row"><div class="slot-time">🎉</div><div><div class="slot-title">기념일</div>${sc.note?`<div class="slot-note">${sc.note}</div>`:''}</div></div>`;
+  if (!sc) return;
+  const dt  = new Date(dd+'T00:00:00');
+  const color = TYPE_COLORS[sc.status] || TYPE_COLORS.normal;
+  const label = TYPE_LABELS[sc.status] || '방송';
+
+  document.getElementById('modalDate').textContent = `${dd} (${DOW[dt.getDay()]})`;
+  document.getElementById('modalBadge').style.background = color;
+  document.getElementById('modalBadge').textContent = label;
+
+  let slots = '';
+  if (sc.status === 'holiday') {
+    slots = `<div class="modal-slot"><div class="modal-slot-title">🛌 휴방</div></div>`;
   } else {
-    if (sc.slot1_title) inner += `<div class="slot-row"><div class="slot-time">${sc.slot1_time||'?'}</div><div><div class="slot-title">${sc.slot1_title}</div>${sc.note?`<div class="slot-note">${sc.note}</div>`:''}</div></div>`;
-    if (sc.slot2_title) inner += `<div class="slot-row"><div class="slot-time">${sc.slot2_time||'?'}</div><div><div class="slot-title">${sc.slot2_title}</div></div></div>`;
-    if (!sc.slot1_title && !sc.slot2_title) inner += `<div class="no-sched">내용 없음</div>`;
+    if (sc.slot1_title) slots += `<div class="modal-slot"><div class="modal-slot-time">${sc.slot1_time||''}</div><div class="modal-slot-title">${sc.slot1_title}</div></div>`;
+    if (sc.slot2_title) slots += `<div class="modal-slot"><div class="modal-slot-time">${sc.slot2_time||''}</div><div class="modal-slot-title">${sc.slot2_title}</div></div>`;
+    if (!sc.slot1_title && !sc.slot2_title) slots = `<div class="modal-slot"><div class="modal-slot-title">${label} 예정</div></div>`;
   }
-  card.innerHTML = inner;
-  card.style.display = 'block';
-  card.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  document.getElementById('modalSlots').innerHTML = slots;
+
+  const noteEl = document.getElementById('modalNote');
+  if (sc.note) { noteEl.textContent = sc.note; noteEl.style.display='block'; }
+  else noteEl.style.display='none';
+
+  document.getElementById('eventModal').classList.add('open');
 }
-
-document.getElementById('prevBtn').onclick = () => { cur.setMonth(cur.getMonth()-1); selectedDate=null; document.getElementById('detailCard').style.display='none'; loadMonth(cur.getFullYear(),cur.getMonth()); };
-document.getElementById('nextBtn').onclick = () => { cur.setMonth(cur.getMonth()+1); selectedDate=null; document.getElementById('detailCard').style.display='none'; loadMonth(cur.getFullYear(),cur.getMonth()); };
-
-loadMonth(cur.getFullYear(), cur.getMonth());
+function closeModal() { document.getElementById('eventModal').classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 
 // 다가오는 일정
-async function loadUpcoming(){
-  const today=new Date();
-  const fmt=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-  const after=fmt(today);
-  const future=new Date(today);future.setDate(today.getDate()+14);
-  const before=fmt(future);
-  const res=await fetch(`${SUPABASE_URL}/rest/v1/schedules?date=gte.${after}&date=lte.${before}&order=date.asc&limit=5`,{
-    headers:{apikey:SUPABASE_ANON,Authorization:`Bearer ${SUPABASE_ANON}`}
+async function loadUpcoming() {
+  const today = new Date();
+  const after = fmt(today);
+  const futureDate = new Date(today); futureDate.setDate(today.getDate()+14);
+  const before = fmt(futureDate);
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/schedules?date=gte.${after}&date=lte.${before}&order=date.asc&limit=7`, {
+    headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` }
   });
-  const data=await res.json();
-  const el=document.getElementById('upcomingList');
-  if(!data||!data.length){el.innerHTML='<div style="color:var(--gray-400);font-size:.85rem;padding:8px;">다가오는 일정이 없어요</div>';return;}
-  const dows=['일','월','화','수','목','금','토'];
-  const statusLabel={normal:'방송',holiday:'휴방',special:'특방',anniversary:'기념일'};
-  el.innerHTML=data.map(s=>{
-    const dt=new Date(s.date+'T00:00:00');
-    const dow=dows[dt.getDay()];
-    const lbl=statusLabel[s.status]||'방송';
-    const cls=s.status==='holiday'?'holiday':s.status==='special'?'special':'';
-    return `<div class="upcoming-item ${cls}">
-      <div class="upcoming-date">${s.date.slice(5)} (${dow})</div>
-      <div class="upcoming-content">
-        <div class="u-title">${s.slot1_title||lbl}${s.slot2_title?' · '+s.slot2_title:''}</div>
-        ${s.slot1_time?`<div class="u-time">${s.slot1_time}${s.slot2_time?' · '+s.slot2_time:''}</div>`:''}
+  const data = await res.json();
+  const el = document.getElementById('upcomingList');
+  if (!data || !data.length) { el.innerHTML = '<div class="empty-state">다가오는 일정이 없어요</div>'; return; }
+  el.innerHTML = data.map(s => {
+    const dt  = new Date(s.date+'T00:00:00');
+    const dow = DOW[dt.getDay()];
+    const color = TYPE_COLORS[s.status] || TYPE_COLORS.normal;
+    const label = TYPE_LABELS[s.status] || '방송';
+    const cls = s.status==='holiday'?'holiday':s.status==='special'||s.status==='event'?'special':'';
+    const title = s.slot1_title || label;
+    const time = s.slot1_time ? s.slot1_time + (s.slot2_time?' · '+s.slot2_time:'') : '';
+    return `<div class="upcoming-item ${cls}" onclick="upcomingClick('${s.date}')">
+      <div class="u-date">${s.date.slice(5)} (${dow})</div>
+      <div class="u-body">
+        <div class="u-title">${title}${s.slot2_title?' · '+s.slot2_title:''}</div>
+        ${time?`<div class="u-time">${time}</div>`:''}
       </div>
-      <span class="upcoming-badge">${lbl}</span>
+      <span class="u-badge" style="background:${color}">${label}</span>
     </div>`;
   }).join('');
 }
-loadUpcoming();
 
+async function upcomingClick(dd) {
+  // 해당 달로 이동 후 모달
+  const [y, m] = dd.split('-').map(Number);
+  cur = new Date(y, m-1, 1);
+  await loadMonth(y, m-1);
+  showEvent(dd);
+}
+
+document.getElementById('prevBtn').onclick = () => { cur.setMonth(cur.getMonth()-1); loadMonth(cur.getFullYear(), cur.getMonth()); };
+document.getElementById('nextBtn').onclick = () => { cur.setMonth(cur.getMonth()+1); loadMonth(cur.getFullYear(), cur.getMonth()); };
+
+loadMonth(cur.getFullYear(), cur.getMonth());
+loadUpcoming();
 </script>
 </body>
 </html>
