@@ -612,14 +612,23 @@ function editSchedule(id){
   document.getElementById('editModalBody').innerHTML=`
     <div style="display:flex;flex-direction:column;gap:10px;">
       <div><label>날짜</label><input type="date" id="eDate" value="${s.date}"></div>
-      <div><label>시간</label><input type="time" id="eTime" value="${s.slot1_time||'17:00'}"></div>
       <div><label>상태</label><select id="eStatus">
         <option value="normal"${s.status==='normal'?' selected':''}>방송</option>
         <option value="holiday"${s.status==='holiday'?' selected':''}>휴방</option>
         <option value="special"${s.status==='special'?' selected':''}>특방</option>
+        <option value="collab"${s.status==='collab'?' selected':''}>합방</option>
+        <option value="contest"${s.status==='contest'?' selected':''}>대회</option>
+        <option value="mc_server"${s.status==='mc_server'?' selected':''}>마크서버</option>
+        <option value="event"${s.status==='event'?' selected':''}>이벤트</option>
         <option value="anniversary"${s.status==='anniversary'?' selected':''}>기념일</option>
+        <option value="other"${s.status==='other'?' selected':''}>기타</option>
       </select></div>
-      <div><label>제목</label><input type="text" id="eTitle" value="${s.slot1_title||''}"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div><label>1부 시간</label><input type="time" id="eTime" value="${s.slot1_time||'17:00'}"></div>
+        <div><label>1부 제목</label><input type="text" id="eTitle" value="${s.slot1_title||''}"></div>
+        <div><label>2부 시간</label><input type="time" id="eTime2" value="${s.slot2_time||''}"></div>
+        <div><label>2부 제목</label><input type="text" id="eTitle2" value="${s.slot2_title||''}"></div>
+      </div>
       <div><label>메모</label><textarea id="eNote">${s.note||''}</textarea></div>
       <div style="text-align:right;"><button class="btn btn-add" onclick="saveScheduleEdit('${id}')">저장</button></div>
     </div>`;
@@ -629,9 +638,11 @@ function editSchedule(id){
 async function saveScheduleEdit(id){
   const{error}=await supabaseClient.from('schedules').update({
     date:document.getElementById('eDate').value,
-    slot1_time:document.getElementById('eTime').value||'17:00',
     status:document.getElementById('eStatus').value,
-    slot1_title:document.getElementById('eTitle').value.trim(),
+    slot1_time:document.getElementById('eTime').value||'17:00',
+    slot1_title:document.getElementById('eTitle').value.trim()||null,
+    slot2_time:document.getElementById('eTime2').value||null,
+    slot2_title:document.getElementById('eTitle2').value.trim()||null,
     note:document.getElementById('eNote').value.trim()||null
   }).eq('id',id);
   if(error){toast('수정 실패');return;}
