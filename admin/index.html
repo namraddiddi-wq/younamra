@@ -158,6 +158,7 @@ td.strong{color:var(--text);font-weight:600;}
     <button class="tab-btn" onclick="switchTab('song')">🎵 노래</button>
     <button class="tab-btn" onclick="switchTab('upbo')">⚡ 업보</button>
     <button class="tab-btn" onclick="switchTab('inquiry')">✉️ 문의</button>
+    <button class="tab-btn" onclick="switchTab('settings')">⚙️ 설정</button>
   </div>
 
   <!-- ══ 일정 ══ -->
@@ -166,34 +167,38 @@ td.strong{color:var(--text);font-weight:600;}
       <div class="sc-title">➕ 일정 추가</div>
       <div class="r3">
         <div><label>날짜</label><input type="date" id="sDate"></div>
-        <div><label>시간</label><input type="time" id="sTime" value="17:00"></div>
         <div><label>유형</label>
-          <select id="sType">
+          <select id="sType" onchange="onTypeChange()">
             <option value="broadcast">방송</option>
             <option value="rest">휴방</option>
-            <option value="event">이벤트</option>
             <option value="collab">합방</option>
+            <option value="contest">대회</option>
+            <option value="mc_server">마크서버</option>
+            <option value="event">이벤트</option>
             <option value="other">기타</option>
           </select>
         </div>
+        <div><label>메모/설명</label><input type="text" id="sDesc" placeholder="선택 사항"></div>
       </div>
-      <div style="margin-top:10px;"><label>제목</label><input type="text" id="sTitle" placeholder="방송 제목"></div>
-      <div style="margin-top:10px;"><label>설명 (선택)</label><textarea id="sDesc" placeholder="추가 설명"></textarea></div>
-      <div style="margin-top:10px;">
-        <label>색상</label>
-        <div class="color-sel" id="colorSel">
-          <div class="cdot sel" style="background:#6dcdd0" data-c="#6dcdd0"></div>
-          <div class="cdot" style="background:#9de0e2" data-c="#9de0e2"></div>
-          <div class="cdot" style="background:#f0a8c8" data-c="#f0a8c8"></div>
-          <div class="cdot" style="background:#86efac" data-c="#86efac"></div>
-          <div class="cdot" style="background:#93c5fd" data-c="#93c5fd"></div>
-          <div class="cdot" style="background:#fcd34d" data-c="#fcd34d"></div>
+      <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div>
+          <label>1부 시간</label>
+          <input type="time" id="sTime" value="17:00">
+        </div>
+        <div>
+          <label>1부 제목</label>
+          <input type="text" id="sTitle" placeholder="방송 제목">
+        </div>
+        <div>
+          <label>2부 시간 (선택)</label>
+          <input type="time" id="sTime2">
+        </div>
+        <div>
+          <label>2부 제목 (선택)</label>
+          <input type="text" id="sTitle2" placeholder="2부 있을 경우">
         </div>
       </div>
       <div style="margin-top:12px;display:flex;align-items:center;gap:12px;">
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin:0;font-size:12px;color:var(--text-sub);">
-          <input type="checkbox" id="sHighlight" style="width:auto;"> 강조 표시
-        </label>
         <button class="btn btn-add" style="margin-left:auto;" onclick="addSchedule()">추가</button>
       </div>
     </div>
@@ -241,7 +246,7 @@ td.strong{color:var(--text);font-weight:600;}
       <div style="margin-bottom:12px;"><input type="text" id="songSearch" placeholder="🔍 검색..." oninput="filterSongs()"></div>
       <div class="tw">
         <table>
-          <thead><tr><th>제목</th><th>아티스트</th><th>장르</th><th>난이도</th><th>관리</th></tr></thead>
+          <thead><tr><th>제목</th><th>아티스트</th><th>장르</th><th>난이도</th><th>메모</th><th>관리</th></tr></thead>
           <tbody id="songBody"><tr class="empty-row"><td colspan="4">불러오는 중...</td></tr></tbody>
         </table>
       </div>
@@ -333,6 +338,34 @@ td.strong{color:var(--text);font-weight:600;}
       <div id="inqList"><div style="text-align:center;padding:24px;font-size:13px;color:var(--text-mut);">불러오는 중...</div></div>
     </div>
   </div>
+
+  <!-- ══ 설정 ══ -->
+  <div class="tab-content" id="tab-settings">
+    <!-- 방송 목표 -->
+    <div class="sc">
+      <div class="sc-title">🎯 방송 목표 관리</div>
+      <div id="goalsList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;"></div>
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="newGoalText" placeholder="새 목표 입력 (예: 건강해지기)" style="flex:1;">
+        <select id="newGoalDone" style="width:80px;">
+          <option value="false">진행중</option>
+          <option value="true">완료</option>
+        </select>
+        <button class="btn btn-add" onclick="addGoal()">추가</button>
+      </div>
+    </div>
+
+    <!-- 후원 API -->
+    <div class="sc">
+      <div class="sc-title">💙 후원 API 관리</div>
+      <div id="apiList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;"></div>
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="newApiCnt" placeholder="개수 (예: 100개)" style="width:120px;">
+        <input type="text" id="newApiLabel" placeholder="내용 (예: 코인와다다)" style="flex:1;">
+        <button class="btn btn-add" onclick="addApi()">추가</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- 수정 모달 -->
@@ -382,10 +415,94 @@ function doLogout(){
 document.getElementById('loginPw').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
 function init(){
+  loadSettings();
   const now=new Date();
   document.getElementById('sFilterMonth').value=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
   document.getElementById('upboDateAssign').value=now.toISOString().split('T')[0];
   loadSchedules();loadSongs();loadTaskTypes();loadMembers();loadInquiries();
+}
+
+
+// ══════════════════════════
+// 설정 — 목표/후원API (upbo_settings 활용)
+// ══════════════════════════
+async function loadSettings(){
+  const {data}=await supabaseClient.from('upbo_settings').select('*');
+  const map=Object.fromEntries((data||[]).map(d=>[d.key,d.value]));
+
+  // 목표
+  let goals=[];
+  try{goals=JSON.parse(map.goals||'[]');}catch(e){}
+  renderGoals(goals);
+
+  // 후원 API
+  let apis=[];
+  try{apis=JSON.parse(map.donation_api||'[]');}catch(e){}
+  renderApis(apis);
+}
+
+function renderGoals(goals){
+  document.getElementById('goalsList').innerHTML=goals.map((g,i)=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;">
+      <span style="font-size:13px;flex:1;${g.done?'text-decoration:line-through;opacity:.5':''}"><strong style="color:var(--primary-dk);margin-right:6px;">${String(g.num||i+1).padStart(2,'0')}</strong>${g.text}</span>
+      <button class="btn-edit" onclick="toggleGoal(${i})">${g.done?'복원':'완료'}</button>
+      <button class="btn-del" onclick="delGoal(${i})">삭제</button>
+    </div>`).join('');
+  window._goals=goals;
+}
+
+function renderApis(apis){
+  document.getElementById('apiList').innerHTML=apis.map((a,i)=>`
+    <div style="display:grid;grid-template-columns:110px 1fr auto auto;gap:8px;align-items:center;">
+      <input type="text" value="${a.cnt}" onchange="updateApi(${i},'cnt',this.value)" style="font-size:13px;padding:7px 10px;">
+      <input type="text" value="${a.label}" onchange="updateApi(${i},'label',this.value)" style="font-size:13px;padding:7px 10px;">
+      <button class="btn-del" onclick="delApi(${i})">삭제</button>
+    </div>`).join('');
+  window._apis=apis;
+}
+
+function updateApi(i,key,val){window._apis[i][key]=val;}
+
+async function saveGoals(){
+  await supabaseClient.from('upbo_settings').upsert([{key:'goals',value:JSON.stringify(window._goals||[])}]);
+  toast('✅ 목표 저장됨');
+}
+async function saveApis(){
+  await supabaseClient.from('upbo_settings').upsert([{key:'donation_api',value:JSON.stringify(window._apis||[])}]);
+  toast('✅ 후원 API 저장됨');loadSettings();
+}
+async function addGoal(){
+  const text=document.getElementById('newGoalText').value.trim();
+  if(!text)return;
+  const goals=window._goals||[];
+  const nums=goals.map(g=>parseInt(g.num)||0);
+  const nextNum=nums.length?Math.max(...nums)+1:1;
+  goals.push({num:nextNum,text,done:document.getElementById('newGoalDone').value==='true'});
+  await supabaseClient.from('upbo_settings').upsert([{key:'goals',value:JSON.stringify(goals)}]);
+  document.getElementById('newGoalText').value='';
+  toast('✅ 목표 추가됨');loadSettings();
+}
+function toggleGoal(i){const g=window._goals||[];g[i].done=!g[i].done;renderGoals(g);}
+async function delGoal(i){
+  const g=(window._goals||[]).filter((_,idx)=>idx!==i);
+  await supabaseClient.from('upbo_settings').upsert([{key:'goals',value:JSON.stringify(g)}]);
+  toast('🗑️ 삭제됨');loadSettings();
+}
+async function addApi(){
+  const cnt=document.getElementById('newApiCnt').value.trim();
+  const label=document.getElementById('newApiLabel').value.trim();
+  if(!cnt||!label)return;
+  const apis=window._apis||[];
+  apis.push({cnt,label});
+  await supabaseClient.from('upbo_settings').upsert([{key:'donation_api',value:JSON.stringify(apis)}]);
+  document.getElementById('newApiCnt').value='';
+  document.getElementById('newApiLabel').value='';
+  toast('✅ 추가됨');loadSettings();
+}
+async function delApi(i){
+  const apis=(window._apis||[]).filter((_,idx)=>idx!==i);
+  await supabaseClient.from('upbo_settings').upsert([{key:'donation_api',value:JSON.stringify(apis)}]);
+  toast('🗑️ 삭제됨');loadSettings();
 }
 
 // ── TOAST ──
@@ -397,8 +514,9 @@ function toast(msg){
 
 // ── TABS ──
 function switchTab(name){
-  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',['schedule','song','upbo','inquiry'][i]===name));
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',['schedule','song','upbo','inquiry','settings'][i]===name));
   document.querySelectorAll('.tab-content').forEach(p=>p.classList.toggle('active',p.id===`tab-${name}`));
+  if(name==='settings')loadSettings();
 }
 function switchUpbo(name){
   document.querySelectorAll('#tab-upbo .sub-btn').forEach((b,i)=>b.classList.toggle('active',['assign','members','types'][i]===name));
@@ -417,12 +535,7 @@ const TL={broadcast:'방송',rest:'휴방',event:'이벤트',collab:'합방',oth
 const DOW=['일','월','화','수','목','금','토'];
 let selColor='#6dcdd0',scheduleData=[];
 
-document.querySelectorAll('.cdot').forEach(d=>{
-  d.addEventListener('click',()=>{
-    document.querySelectorAll('.cdot').forEach(x=>x.classList.remove('sel'));
-    d.classList.add('sel');selColor=d.dataset.c;
-  });
-});
+// 색상 자동처리
 
 async function loadSchedules(){
   const m=document.getElementById('sFilterMonth').value;if(!m)return;
@@ -454,20 +567,34 @@ function renderScheduleTable(){
   }).join('');
 }
 
+const TYPE_STATUS={broadcast:'normal',rest:'holiday',collab:'normal',contest:'special',mc_server:'special',event:'special',other:'normal'};
+const TYPE_LABEL={broadcast:'방송',rest:'휴방',collab:'합방',contest:'대회',mc_server:'마크서버',event:'이벤트',other:'기타'};
+
+function onTypeChange(){
+  const t=document.getElementById('sType').value;
+  const isRest=t==='rest';
+  document.getElementById('sTitle').placeholder=isRest?'(휴방)':TYPE_LABEL[t]||'방송 제목';
+}
+
 async function addSchedule(){
-  const date=document.getElementById('sDate').value,title=document.getElementById('sTitle').value.trim();
-  if(!date||!title){toast('날짜와 제목을 입력해주세요');return;}
+  const date=document.getElementById('sDate').value;
+  if(!date){toast('날짜를 입력해주세요');return;}
   const type=document.getElementById('sType').value;
-  const statusMap={broadcast:'normal',rest:'holiday',event:'special',collab:'normal',other:'normal'};
+  const title=document.getElementById('sTitle').value.trim()||(type==='rest'?'휴방':'');
   const{error}=await supabaseClient.from('schedules').upsert([{
-    date,status:statusMap[type]||'normal',
-    slot1_title:title,slot1_time:document.getElementById('sTime').value||'17:00',
-    note:document.getElementById('sDesc').value.trim()||null,
+    date,
+    status:TYPE_STATUS[type]||'normal',
+    slot1_title:title||null,
+    slot1_time:document.getElementById('sTime').value||'17:00',
+    slot2_title:document.getElementById('sTitle2').value.trim()||null,
+    slot2_time:document.getElementById('sTime2').value||null,
+    note:document.getElementById('sDesc').value.trim()||TYPE_LABEL[type]||null,
   }],{onConflict:'date'});
   if(error){toast('추가 실패: '+error.message);return;}
   toast('✅ 일정 추가!');
-  ['sDate','sTitle','sDesc'].forEach(id=>document.getElementById(id).value='');
+  ['sDate','sTitle','sTitle2','sDesc'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('sTime').value='17:00';
+  document.getElementById('sTime2').value='';
   loadSchedules();
 }
 
@@ -530,8 +657,9 @@ function renderSongTable(list){
       <td>${s.artist||'-'}</td>
       <td><span class="badge" style="background:var(--primary-lt);color:var(--primary-dk);">${GENRE_LABEL[s.genre]||'기타'}</span></td>
       <td>${'⭐'.repeat(s.level||3)}</td>
+      <td style="font-size:12px;color:var(--text-sub);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.memo||'-'}</td>
       <td><button class="btn-del" onclick="delSong('${s.id}')">삭제</button></td>
-    </tr>`).join(''):'<tr class="empty-row"><td colspan="4">없음</td></tr>';
+    </tr>`).join(''):'<tr class="empty-row"><td colspan="5">없음</td></tr>';
 }
 async function addSong(){
   const title=document.getElementById('songTitle').value.trim();

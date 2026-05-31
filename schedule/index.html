@@ -70,6 +70,19 @@ main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
 .slot-note{font-size:.82rem;color:var(--text-muted);margin-top:3px;}
 .no-sched{color:var(--gray-400);font-size:.9rem;padding:12px 0;}
 
+
+.upcoming-section{margin-top:20px;}
+.upcoming-title{font-family:'A2z',sans-serif;font-size:1rem;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.upcoming-list{display:flex;flex-direction:column;gap:8px;}
+.upcoming-item{background:var(--white);border-radius:12px;padding:14px 16px;box-shadow:0 2px 12px var(--shadow);display:flex;align-items:center;gap:14px;border-left:4px solid var(--primary);}
+.upcoming-item.holiday{border-left-color:#f0a8c8;}
+.upcoming-item.special{border-left-color:#c9b3ff;}
+.upcoming-date{font-size:.8rem;font-weight:700;color:var(--text-muted);min-width:70px;}
+.upcoming-content{flex:1;}
+.upcoming-content .u-title{font-size:.9rem;font-weight:600;color:var(--text);}
+.upcoming-content .u-time{font-size:.78rem;color:var(--text-muted);margin-top:2px;}
+.upcoming-badge{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--primary-pale);color:var(--primary-deep);}
+
 footer{text-align:center;padding:28px 20px;color:var(--gray-400);font-size:.8rem;border-top:1px solid var(--gray-200);}
 @media(max-width:768px){nav a{padding:14px 18px;font-size:.85rem;}.cal-cell{min-height:52px;padding:4px;}.slot-preview{display:none;}}
 </style>
@@ -97,8 +110,12 @@ footer{text-align:center;padding:28px 20px;color:var(--gray-400);font-size:.8rem
   </div>
 
   <div class="detail-card" id="detailCard" style="display:none;"></div>
+  <div class="upcoming-section">
+    <div class="upcoming-title">📋 다가오는 일정</div>
+    <div class="upcoming-list" id="upcomingList"><div style="color:var(--gray-400);font-size:.85rem;padding:8px;">불러오는 중...</div></div>
+  </div>
 </main>
-<footer>유남라 팬사이트 · 팬 이름 유랑이 · 팬닉 뒤에 ^´</footer>
+<footer>유남라 · 유랑이 💚</footer>
 
 <script>
 const SUPABASE_URL  = 'https://xigbjaayjqshjulsovqn.supabase.co';
@@ -184,6 +201,39 @@ document.getElementById('prevBtn').onclick = () => { cur.setMonth(cur.getMonth()
 document.getElementById('nextBtn').onclick = () => { cur.setMonth(cur.getMonth()+1); selectedDate=null; document.getElementById('detailCard').style.display='none'; loadMonth(cur.getFullYear(),cur.getMonth()); };
 
 loadMonth(cur.getFullYear(), cur.getMonth());
+
+// 다가오는 일정
+async function loadUpcoming(){
+  const today=new Date();
+  const fmt=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const after=fmt(today);
+  const future=new Date(today);future.setDate(today.getDate()+14);
+  const before=fmt(future);
+  const res=await fetch(`${SUPABASE_URL}/rest/v1/schedules?date=gte.${after}&date=lte.${before}&order=date.asc&limit=5`,{
+    headers:{apikey:SUPABASE_ANON,Authorization:`Bearer ${SUPABASE_ANON}`}
+  });
+  const data=await res.json();
+  const el=document.getElementById('upcomingList');
+  if(!data||!data.length){el.innerHTML='<div style="color:var(--gray-400);font-size:.85rem;padding:8px;">다가오는 일정이 없어요</div>';return;}
+  const dows=['일','월','화','수','목','금','토'];
+  const statusLabel={normal:'방송',holiday:'휴방',special:'특방',anniversary:'기념일'};
+  el.innerHTML=data.map(s=>{
+    const dt=new Date(s.date+'T00:00:00');
+    const dow=dows[dt.getDay()];
+    const lbl=statusLabel[s.status]||'방송';
+    const cls=s.status==='holiday'?'holiday':s.status==='special'?'special':'';
+    return `<div class="upcoming-item ${cls}">
+      <div class="upcoming-date">${s.date.slice(5)} (${dow})</div>
+      <div class="upcoming-content">
+        <div class="u-title">${s.slot1_title||lbl}${s.slot2_title?' · '+s.slot2_title:''}</div>
+        ${s.slot1_time?`<div class="u-time">${s.slot1_time}${s.slot2_time?' · '+s.slot2_time:''}</div>`:''}
+      </div>
+      <span class="upcoming-badge">${lbl}</span>
+    </div>`;
+  }).join('');
+}
+loadUpcoming();
+
 </script>
 </body>
 </html>
