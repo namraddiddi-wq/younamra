@@ -345,6 +345,7 @@ td.strong{color:var(--text);font-weight:600;}
     <div class="sc">
       <div class="sc-title">🎯 방송 목표 관리</div>
       <div id="goalsList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;"></div>
+      <div style="text-align:right;margin-bottom:10px;"><button class="btn btn-add" onclick="saveGoals()">💾 저장</button></div>
       <div style="display:flex;gap:8px;">
         <input type="text" id="newGoalText" placeholder="새 목표 입력 (예: 건강해지기)" style="flex:1;">
         <select id="newGoalDone" style="width:80px;">
@@ -359,6 +360,7 @@ td.strong{color:var(--text);font-weight:600;}
     <div class="sc">
       <div class="sc-title">💙 후원 API 관리</div>
       <div id="apiList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;"></div>
+      <div style="text-align:right;margin-bottom:10px;"><button class="btn btn-add" onclick="saveApis()">💾 저장</button></div>
       <div style="display:flex;gap:8px;">
         <input type="text" id="newApiCnt" placeholder="개수 (예: 100개)" style="width:120px;">
         <input type="text" id="newApiLabel" placeholder="내용 (예: 코인와다다)" style="flex:1;">
