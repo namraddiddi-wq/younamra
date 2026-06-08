@@ -67,6 +67,11 @@ main{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
 .empty-state{text-align:center;padding:60px 20px;color:var(--gray-400);}
 .empty-state .icon{font-size:3rem;margin-bottom:12px;}
 
+.pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:18px;flex-wrap:wrap;}
+.pg-btn{width:34px;height:34px;border-radius:10px;border:1.5px solid var(--gray-200);background:var(--white);font-size:.85rem;font-weight:600;cursor:pointer;color:var(--text-muted);transition:all .2s;display:flex;align-items:center;justify-content:center;}
+.pg-btn:hover{border-color:var(--primary);color:var(--primary-deep);}
+.pg-btn.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+.pg-btn.disabled{opacity:.35;cursor:default;pointer-events:none;}
 footer{text-align:center;padding:28px 20px;color:var(--gray-400);font-size:.8rem;border-top:1px solid var(--gray-200);}
 
 @media(max-width:768px){
@@ -115,6 +120,7 @@ footer{text-align:center;padding:28px 20px;color:var(--gray-400);font-size:.8rem
       <tr><td colspan="5"><div class="empty-state"><div class="icon">🎵</div>불러오는 중...</div></td></tr>
     </tbody>
   </table>
+  <div class="pagination" id="pagination"></div>
 </main>
 <footer><p>유남라 · 유랑이 💚</p><p style="margin-top:6px;font-size:11px;color:var(--text-mut,#aaa)">Designed &amp; Developed by <strong style="color:var(--text-sub,#6b7280)">아키텍트 크리에이티브</strong> · <a href="mailto:profile@soop.info" style="color:var(--text-mut,#aaa);text-decoration:none;" onmouseover="this.style.color='var(--primary-dk,#4ab8bc)'" onmouseout="this.style.color='var(--text-mut,#aaa)'">profile@soop.info</a></p></footer>
 
@@ -125,48 +131,89 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 const GENRE_LABEL = {kpop:'K-Pop',jpop:'J-Pop',pop:'Pop',cn:'중국',aegyo:'애교송',etc:'기타'};
 const GENRE_CLASS = {kpop:'g-kpop',jpop:'g-jpop',pop:'g-pop',cn:'g-cn',aegyo:'g-aegyo',etc:'g-etc'};
 
-let allSongs = [];
-let curGenre = 'all';
-let curSearch = '';
+const PAGE_SIZE = 25;
+let allSongs = [], curGenre = 'all', curSearch = '', curPage = 1;
 
 async function loadSongs() {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/songs?order=sort_order.asc,created_at.asc`, {
     headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` }
   });
   allSongs = await res.json();
+  curPage = 1;
   render();
 }
 
-function render() {
+function getFiltered() {
   let list = allSongs;
   if (curGenre !== 'all') list = list.filter(s => s.genre === curGenre);
   if (curSearch) {
     const q = curSearch.toLowerCase();
     list = list.filter(s => (s.title||'').toLowerCase().includes(q) || (s.artist||'').toLowerCase().includes(q));
   }
+  return list;
+}
+
+function render() {
+  const list = getFiltered();
+  const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+  if (curPage > totalPages) curPage = totalPages;
+
+  const paged = list.slice((curPage-1)*PAGE_SIZE, curPage*PAGE_SIZE);
   const tbody = document.getElementById('songBody');
-  document.getElementById('stats').innerHTML = `총 <strong>${allSongs.length}</strong>곡 · 표시 <strong>${list.length}</strong>곡`;
-  if (!list.length) {
+
+  document.getElementById('stats').innerHTML =
+    `총 <strong>${allSongs.length}</strong>곡 · 표시 <strong>${list.length}</strong>곡` +
+    (totalPages > 1 ? ` · <strong>${curPage}</strong>/${totalPages} 페이지` : '');
+
+  if (!paged.length) {
     tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><div class="icon">🔍</div>검색 결과가 없어요</div></td></tr>`;
+    renderPagination(0, 1);
     return;
   }
-  tbody.innerHTML = list.map((s,i) => `
+
+  const offset = (curPage-1)*PAGE_SIZE;
+  tbody.innerHTML = paged.map((s,i) => `
     <tr>
-      <td style="color:var(--gray-400);font-size:.8rem;">${i+1}</td>
+      <td style="color:var(--gray-400);font-size:.8rem;">${offset+i+1}</td>
       <td class="title">${s.title||'-'}</td>
       <td>${s.artist||'-'}</td>
       <td><span class="genre-badge ${GENRE_CLASS[s.genre]||'g-etc'}">${GENRE_LABEL[s.genre]||'기타'}</span></td>
       <td><div class="level-dots">${[1,2,3,4,5].map(n=>`<span class="${n<=(s.level||3)?'dot-f':'dot-e'}"></span>`).join('')}</div></td>
     </tr>
   `).join('');
+
+  renderPagination(totalPages, curPage);
 }
 
-document.getElementById('searchInput').addEventListener('input', e => { curSearch = e.target.value; render(); });
+function renderPagination(total, cur) {
+  const el = document.getElementById('pagination');
+  if (total <= 1) { el.innerHTML = ''; return; }
+
+  let html = `<button class="pg-btn${cur===1?' disabled':''}" onclick="goPage(${cur-1})">‹</button>`;
+  for (let i=1; i<=total; i++) {
+    if (total > 7 && i > 2 && i < total-1 && Math.abs(i-cur) > 1) {
+      if (i === 3 || i === total-2) html += `<span style="padding:0 4px;color:var(--gray-400);">…</span>`;
+      continue;
+    }
+    html += `<button class="pg-btn${i===cur?' active':''}" onclick="goPage(${i})">${i}</button>`;
+  }
+  html += `<button class="pg-btn${cur===total?' disabled':''}" onclick="goPage(${cur+1})">›</button>`;
+  el.innerHTML = html;
+}
+
+function goPage(p) {
+  curPage = p;
+  render();
+  document.querySelector('.song-table').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+document.getElementById('searchInput').addEventListener('input', e => { curSearch = e.target.value; curPage=1; render(); });
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     curGenre = btn.dataset.genre;
+    curPage = 1;
     render();
   });
 });
