@@ -508,7 +508,7 @@ document.querySelectorAll('.fade-up').forEach(el => {
 
 
 <!-- 스케줄 팝업 -->
-<div id="schedPopup" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.3);backdrop-filter:blur(6px);align-items:center;justify-content:center;">
+<div id="schedPopup" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.3);backdrop-filter:blur(6px);align-items:flex-start;justify-content:center;padding-top:400px;overflow-y:auto;">
   <div onclick="event.stopPropagation()" style="background:#fff;border-radius:20px;padding:24px;max-width:340px;width:90%;box-shadow:0 16px 48px rgba(109,205,208,.2);border:1.5px solid var(--primary-pale);animation:popIn .2s ease;">
     <div id="schedPopupContent"></div>
     <button onclick="document.getElementById('schedPopup').style.display='none'" style="width:100%;margin-top:16px;padding:10px;border-radius:12px;background:var(--primary-pale);color:var(--primary-deep);border:none;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;">닫기</button>
